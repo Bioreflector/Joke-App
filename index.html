@@ -8,10 +8,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
     <title>Document</title>
 </head>
 <body>
-    
+    <div class="wrapper">
+        <main class="main">
+            <div class="work-place">
+                <p class="msi">MSI 2020</p>
+                <button class="favourite-show-btn"><span>Favourite</span></button>
+                <h2 class="work-place-title">Hey! <span>Let’s try to find a joke for you:</span></h2>
+                <form action="" id="joke-find" name="joke-find">
+                    <div class="radio-box">
+                        <label for="random">
+                            <input type="radio" id="random" name="getJoke" value="random">
+                            Random
+                        </label>
+                        <label for="categories">
+                            <input type="radio" id="categories" name="getJoke" value="categories">
+                            From categories</label>
+                        <label for="search">
+                            <input type="radio" id="search" name="getJoke" value="search">
+                            Search</label>
+                            <input type="text" name="serchJoke" id="serchJoke" class="hide-search-field" placeholder="Free text search">
+                    </div>
+                    <button>Get a joke</button>
+                </form>
+                <div class="joke">
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam quos dolor suscipit iusto possimus a ducimus, dignissimos et earum reiciendis dicta, maiores expedita, omnis officia itaque tempore sequi fugiat esse.</p>
+                </div>
+            </div>
+            <div class="favourite-wrapper">
+                <div class="favourite-container">
+                    <h2 class="favourite-title">Favourite</h2>
+                    <div class="favourite-joke">
+                        <button class="test-btn">test</button>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, eveniet alias! Vero iure delectus sint voluptatum laudantium, distinctio culpa, voluptate ab magni reprehenderit sit minima facere explicabo itaque totam tempora.</p>
+                    </div>
+                    <div class="favourite-joke">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, eveniet alias! Vero iure delectus sint voluptatum laudantium, distinctio culpa, voluptate ab magni reprehenderit sit minima facere explicabo itaque totam tempora.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
     
     <script src="script.js"></script>
 </body>

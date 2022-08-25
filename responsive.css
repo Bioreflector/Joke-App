@@ -1,0 +1,30 @@
+@media screen and (max-width: 1000px) {
+    .favourite-show-btn{
+        display: block;
+    }
+    .work-place {
+        width: 100%;
+        padding: 60px;
+    }
+    .favourite-wrapper{
+        position: absolute;
+        right: -100%;
+        transition: all ease 0.5s;
+        z-index: 1;
+        height: 100vh;
+        width: 100%;
+        height: 100%;
+    }
+    .favourite-title{
+        color: transparent;
+    }
+    .show-favourite{
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.226);
+    }
+}
+@media screen and (max-width: 650px) {
+    .favourite-container{
+        width: 100%;
+    }
+}

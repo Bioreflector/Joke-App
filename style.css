@@ -13,7 +13,6 @@ body{
 }
 .main {
     display: flex;
-    height: 100vh;
     position: relative;
     overflow: hidden;
 }
@@ -60,7 +59,7 @@ body{
     gap: 10px;
     margin-bottom: 20px;
 }
-#serchJoke{
+#searchInput{
     padding: 10px 15px 10px 15px;
     box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.24);
     -webkit-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.24);
@@ -83,6 +82,9 @@ body{
 }
 #joke-find{
     margin-bottom: 40px;
+}
+.joke-card{
+    margin-bottom: 20px;
 }
 
 .favourite-container {

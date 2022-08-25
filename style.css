@@ -27,7 +27,7 @@ body{
     margin-bottom: 78px;
 }
 .favourite-show-btn{
-    position: fixed;
+    position: absolute;
     right: 40px;
     top: 40px;
     display: none;

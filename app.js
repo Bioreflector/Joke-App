@@ -20,42 +20,36 @@ function FormSerchJoike(form){
     search.addEventListener('change' , () =>{
         if(search.checked){
             searchInput.classList.remove('hide-search-field')
-            url ='https://api.chucknorris.io/jokes/dpk2_epftfgo0cgpfqcpgq' 
         }
     })
     
-
-
     function getFetch(url){
         return fetch(url).then(data => data.json())
     }
-    async function getCharacters(){
+    async function getJoikes(){
        jokesColection.push(await getFetch(url))
     }
 
     function rander(){
-            item = jokesColection[jokesColection.length-1]
-            // console.log(item)
+            let item = jokesColection[jokesColection.length-1]
             const jokeCard = document.createElement('div')
             jokeCard.classList.add('joke-card')
             const jokesText = document.createElement('p')
             jokesText.innerText = `${item.value}`
             jokeCard.insertAdjacentElement('beforeend' , jokesText)
             form.insertAdjacentElement('afterend' , jokeCard)
-            
-            
-            
+            console.log(jokesColection)
         
     }
 
-    function getJoike(event){
+    function showJoke(event){
         event.preventDefault()
-        getCharacters()
+        getJoikes()
         setTimeout((rander), 1000)
     }
 
     random.addEventListener('change' , checkedRandom)
-    getJokeBtn.addEventListener('click' , getJoike)
+    getJokeBtn.addEventListener('click' , showJoke)
 }
 
 const formSearchJoke = FormSerchJoike(document.formSearchJoke)

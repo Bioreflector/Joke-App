@@ -20,13 +20,16 @@
                 <h2 class="work-place-title">Hey! <span>Let’s try to find a joke for you:</span></h2>
                 <form action="" id="joke-find" name="formSearchJoke">
                     <div class="radio-box">
-                        <label for="random">
+                        <label for="random" class="">
                             <input type="radio" id="random" name="getJoke" value="random">
                             Random
                         </label>
                         <label for="categories">
                             <input type="radio" id="categories" name="getJoke" value="categories">
                             From categories</label>
+                        <div class="categories-container hide-categories">
+                            1
+                        </div>
                         <label for="search">
                             <input type="radio" id="search" name="getJoke" value="search">
                             Search</label>
@@ -34,6 +37,9 @@
                     </div>
                     <button>Get a joke</button>
                 </form>
+                <div class="jokes-container">
+
+                </div>
             </div>
             <div class="favourite-wrapper">
                 <div class="favourite-container">

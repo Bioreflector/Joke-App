@@ -1,58 +1,100 @@
-const jokesColection =[]
+
 const jokesFavouriteColection = []
 
 function FormSerchJoike(form){
-    const getJokeBtn = form.querySelector('button')
-    const {random , categories , search , searchInput} = form
+const jokesContainer = document.querySelector('.jokes-container')
+const categoriesContainer = document.querySelector('.categories-container')
+const getJokeBtn = form.querySelector('button')
+const categoriesArray = ["animal","career","celebrity","dev","explicit","fashion","food","history","money","movie","music","political","religion","science","sport","travel"]
+const {random , categories , search , searchInput} = form
+let url = 'https://api.chucknorris.io/jokes/random'
+let joke
+random.checked = true
 
-    let url = 'https://api.chucknorris.io/jokes/random'
-
-    random.checked = true
-    
-
-    function checkedRandom(){
-        if(random.checked){
-            searchInput.classList.add('hide-search-field')
-            url = 'https://api.chucknorris.io/jokes/random'
+function randerCategory(categoriesArray){
+    const categoriesList = categoriesArray.map((item) =>{
+        if(categoriesArray.indexOf(item) === 0){
+            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories" checked>${item}</label>`
         }
-    }
+        else{
+            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories">${item}</label>`
+        }
+        
+    }).join('')
+    categoriesContainer.innerHTML = categoriesList
+}
+randerCategory(categoriesArray)
+
+function selectRandom(){
+    searchInput.classList.add('hide-search-field')
+    categoriesContainer.classList.add('hide-categories')
+    url = 'https://api.chucknorris.io/jokes/random'
     
-    search.addEventListener('change' , () =>{
-        if(search.checked){
-            searchInput.classList.remove('hide-search-field')
+}
+const categoriesRadio = document.querySelectorAll('.radio-categories')
+function checkedCategories(){
+    categoriesRadio.forEach((radio) =>{
+        if(!radio.checked){
+            radio.parentElement.classList.remove('active-radio')
+            
+        }
+        else{
+            radio.parentElement.classList.add('active-radio')
+            url = `https://api.chucknorris.io/jokes/random?category=${radio.value}`
         }
     })
-    
+}
+
+function selectCategories(){
+        categoriesContainer.classList.remove('hide-categories')
+        searchInput.classList.add('hide-search-field')
+        checkedCategories()
+
+    }
+    function selectSearch(){
+        categoriesContainer.classList.add('hide-categories')
+        searchInput.classList.remove('hide-search-field')
+    }
+
+
     function getFetch(url){
         return fetch(url).then(data => data.json())
     }
     async function getJoikes(){
-       jokesColection.push(await getFetch(url))
+        joke = await getFetch(url)
     }
 
     function rander(){
-            let item = jokesColection[jokesColection.length-1]
-            const jokeCard = document.createElement('div')
-            jokeCard.classList.add('joke-card')
-            const jokesText = document.createElement('p')
-            jokesText.innerText = `${item.value}`
-            jokeCard.insertAdjacentElement('beforeend' , jokesText)
-            form.insertAdjacentElement('afterend' , jokeCard)
-            console.log(jokesColection)
+            // const jokeCard = document.createElement('div')
+            // jokeCard.classList.add('joke-card')
+            // const jokesText = document.createElement('p')
+            // jokesText.innerText = `${joke.value}`
+            // jokeCard.insertAdjacentElement('beforeend' , jokesText)
+            // jokesContainer.insertAdjacentElement('afterend' , jokeCard)
+            jokesContainer.innerHTML = `<div class = "joke-card">
+            <span>${joke.id}</span>
+            <p>${joke.value}</p>
+            <div>
+            <p>${joke.updated_at}</p>
+            <p>${joke.categories}</p>
+            </div>
+            </div>`
         
     }
 
-    function showJoke(event){
+    async function showJoke(event){
         event.preventDefault()
-        getJoikes()
-        setTimeout((rander), 1000)
+        await getJoikes()
+        rander() 
     }
-
-    random.addEventListener('change' , checkedRandom)
+    
+    categoriesRadio.forEach(item => item.addEventListener('click' , checkedCategories))
+    categories.addEventListener('click' , selectCategories)
+    random.addEventListener('click' , selectRandom)
+    search.addEventListener('click' , selectSearch)
     getJokeBtn.addEventListener('click' , showJoke)
 }
 
 const formSearchJoke = FormSerchJoike(document.formSearchJoke)
-console.log(jokesColection)
 
 

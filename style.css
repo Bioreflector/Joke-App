@@ -118,7 +118,52 @@ body{
     margin-bottom: 40px;
 }
 .joke-card{
+    position: relative;
     margin-bottom: 20px;
+    background-color: #F8F8F8;
+    padding: 67px 40px 46px 100px;
+    border-radius: 20px;
+}
+.card-joke-id{
+    color: #ABABAB;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 14px;
+    margin-bottom: 5px;
+}
+.card-joke-id a{
+    color: #8EA7FF;
+}
+.joke-text{
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 23px;
+}
+.card-box-inf{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.update-inf-card{
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+    color:#ABABAB;
+}
+.category-card{
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 6px 20px;
+    background-color: #FFFFFF;
+    color: #333333;
+    border-radius: 6px;
+
+
 }
 
 .favourite-container {

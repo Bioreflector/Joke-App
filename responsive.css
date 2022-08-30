@@ -1,10 +1,15 @@
+@media screen and (max-width: 1350px){
+    .work-place {
+        width: 100%;
+        padding: 40px;
+    }
+}
 @media screen and (max-width: 1000px) {
     .favourite-show-btn{
         display: block;
     }
     .work-place {
-        width: 100%;
-        padding: 60px;
+        padding: 20px;
     }
     .favourite-wrapper{
         position: absolute;
@@ -22,9 +27,26 @@
         right: 0;
         background-color: rgba(0, 0, 0, 0.226);
     }
+    .favourite-show-btn{
+        right: 40px;
+        top: 20px;
+       
+    
+    }
 }
 @media screen and (max-width: 650px) {
     .favourite-container{
         width: 100%;
     }
+    .work-place {
+        padding: 20px;
+    }
+    .joke-card{
+        position: relative;
+        margin-bottom: 20px;
+        background-color: #F8F8F8;
+        padding: 47px 20px 20px 20px;
+        border-radius: 20px;
+    }
+    
 }

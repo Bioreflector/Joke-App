@@ -72,11 +72,11 @@ function selectCategories(){
             // jokeCard.insertAdjacentElement('beforeend' , jokesText)
             // jokesContainer.insertAdjacentElement('afterend' , jokeCard)
             jokesContainer.innerHTML = `<div class = "joke-card">
-            <span>${joke.id}</span>
-            <p>${joke.value}</p>
-            <div>
-            <p>${joke.updated_at}</p>
-            <p>${joke.categories}</p>
+            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${joke.id}">${joke.id}</a></span>
+            <p class="joke-text">${joke.value}</p>
+            <div class = "card-box-inf">
+            <p class="update-inf-card">Last update:</p>
+            <p class ="category-card">${joke.categories}</p>
             </div>
             </div>`
         

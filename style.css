@@ -104,7 +104,7 @@ body{
 .hide-search-field{
     display: none;
 }
-#joke-find button{
+.joke-find__btn{
     padding: 10px 40px 10px 40px;
     color: white;
     border: none;
@@ -113,6 +113,9 @@ body{
     font-size: 16px;
     font-weight: 700;
     line-height: 22px;
+}
+.joke-find__btn_disabled{
+    background-color: #8ea7ff85;
 }
 #joke-find{
     margin-bottom: 40px;

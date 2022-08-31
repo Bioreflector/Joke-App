@@ -8,8 +8,17 @@ const getJokeBtn = form.querySelector('button')
 const categoriesArray = ["animal","career","celebrity","dev","explicit","fashion","food","history","money","movie","music","political","religion","science","sport","travel"]
 const {random , categories , search , searchInput} = form
 let url = 'https://api.chucknorris.io/jokes/random'
-// let joke
+
 random.checked = true
+
+function disableGetJokeBtn(){
+    getJokeBtn.disabled = true
+    getJokeBtn.classList.add('joke-find__btn_disabled')
+}
+function enableGetJokeBtn(){
+    getJokeBtn.disabled = false
+    getJokeBtn.classList.remove('joke-find__btn_disabled')
+}
 
 function randerCategory(categoriesArray){
     const categoriesList = categoriesArray.map((item) =>{
@@ -28,74 +37,63 @@ randerCategory(categoriesArray)
 function selectRandom(){
     searchInput.classList.add('hide-search-field')
     categoriesContainer.classList.add('hide-categories')
-    url = 'https://api.chucknorris.io/jokes/random'
-    
+    getUrlFromRandom()
+    enableGetJokeBtn()
 }
+function selectCategories(){
+    categoriesContainer.classList.remove('hide-categories')
+    searchInput.classList.add('hide-search-field')
+    enableGetJokeBtn()
+
+}
+function selectSearch(){
+    categoriesContainer.classList.add('hide-categories')
+    searchInput.classList.remove('hide-search-field')
+    disableGetJokeBtn()
+}
+
 const categoriesRadio = document.querySelectorAll('.radio-categories')
+
 function checkedCategories(){
-    categoriesRadio.forEach((radio) =>{
-        if(!radio.checked){
-            radio.parentElement.classList.remove('active-radio')
+    categoriesRadio.forEach((category) =>{
+        if(!category.checked){
+            category.parentElement.classList.remove('active-radio')
             
         }
         else{
-            radio.parentElement.classList.add('active-radio')
-            url = `https://api.chucknorris.io/jokes/random?category=${radio.value}`
+            category.parentElement.classList.add('active-radio')
+            getUrlFromCategories(category)
         }
     })
+}
+function getUrlFromCategories(category){
+    url = `https://api.chucknorris.io/jokes/random?category=${category.value}`
+}
+function getUrlFromRandom(){
+    url = 'https://api.chucknorris.io/jokes/random'
 }
 function getUrlFronInput(){
     let valueFromInput = searchInput.value
     url = `https://api.chucknorris.io/jokes/search?query=${valueFromInput}`
-    
+    if(searchInput.value.length >= 3){
+        enableGetJokeBtn()
+    }
+    else{
+        disableGetJokeBtn()
+    }
 }
 
-function selectCategories(){
-        categoriesContainer.classList.remove('hide-categories')
-        searchInput.classList.add('hide-search-field')
-        checkedCategories()
 
-    }
-function selectSearch(){
-        categoriesContainer.classList.add('hide-categories')
-        searchInput.classList.remove('hide-search-field')
-    }
+
+
 
 
     function getFetch(url){
         return fetch(url).then(data => data.json())
     }
-    // async function getJoikes(){
-    //     joke = await getFetch(url)
-    // }
 
-    function rander(jokes){
-            if(jokes.categories.length === 0){
-                jokesContainer.innerHTML = `<div class = "joke-card">
-            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${jokes.id}">${jokes.id}</a></span>
-            <p class="joke-text">${jokes.value}</p>
-            <div class = "card-box-inf">
-            <p class="update-inf-card">Last update:</p>
-            </div>
-            </div>`
-            }
-            else{
-                jokesContainer.innerHTML = `<div class = "joke-card">
-            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${jokes.id}">${jokes.id}</a></span>
-            <p class="joke-text">${jokes.value}</p>
-            <div class = "card-box-inf">
-            <p class="update-inf-card">Last update:</p>
-            <p class ="category-card">${jokes.categories}</p>
-            </div>
-            </div>`
-            }
-            
-        
-    }
-
-    function randerForSearch(jokes){
-        const {result} = jokes
-        const joke = result.map((item) =>{
+    function rander(jokeArr){
+        const joke = jokeArr.map((item) =>{
             if(item.categories.length === 0){
                 return `<div class = "joke-card">
             <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}</a></span>
@@ -120,16 +118,18 @@ function selectSearch(){
     }
 
     
-
+    function ansureArray(arr){
+        return Array.isArray(arr) ? arr : [arr]
+    }
         async function showJoke(event){
         event.preventDefault()
         const jokes = await getFetch(url)
-        // await getJoikes()
         if(search.checked){
-            randerForSearch(jokes)
+            const {result} = jokes
+            rander(result)
         }
         else{
-            rander(jokes)
+            rander(ansureArray(jokes))
         }  
     }
     

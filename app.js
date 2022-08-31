@@ -8,7 +8,7 @@ const getJokeBtn = form.querySelector('button')
 const categoriesArray = ["animal","career","celebrity","dev","explicit","fashion","food","history","money","movie","music","political","religion","science","sport","travel"]
 const {random , categories , search , searchInput} = form
 let url = 'https://api.chucknorris.io/jokes/random'
-let joke
+// let joke
 random.checked = true
 
 function randerCategory(categoriesArray){
@@ -44,6 +44,11 @@ function checkedCategories(){
         }
     })
 }
+function getUrlFronInput(){
+    let valueFromInput = searchInput.value
+    url = `https://api.chucknorris.io/jokes/search?query=${valueFromInput}`
+    
+}
 
 function selectCategories(){
         categoriesContainer.classList.remove('hide-categories')
@@ -51,7 +56,7 @@ function selectCategories(){
         checkedCategories()
 
     }
-    function selectSearch(){
+function selectSearch(){
         categoriesContainer.classList.add('hide-categories')
         searchInput.classList.remove('hide-search-field')
     }
@@ -60,34 +65,75 @@ function selectCategories(){
     function getFetch(url){
         return fetch(url).then(data => data.json())
     }
-    async function getJoikes(){
-        joke = await getFetch(url)
-    }
+    // async function getJoikes(){
+    //     joke = await getFetch(url)
+    // }
 
-    function rander(){
-            // const jokeCard = document.createElement('div')
-            // jokeCard.classList.add('joke-card')
-            // const jokesText = document.createElement('p')
-            // jokesText.innerText = `${joke.value}`
-            // jokeCard.insertAdjacentElement('beforeend' , jokesText)
-            // jokesContainer.insertAdjacentElement('afterend' , jokeCard)
-            jokesContainer.innerHTML = `<div class = "joke-card">
-            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${joke.id}">${joke.id}</a></span>
-            <p class="joke-text">${joke.value}</p>
+    function rander(jokes){
+            if(jokes.categories.length === 0){
+                jokesContainer.innerHTML = `<div class = "joke-card">
+            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${jokes.id}">${jokes.id}</a></span>
+            <p class="joke-text">${jokes.value}</p>
             <div class = "card-box-inf">
             <p class="update-inf-card">Last update:</p>
-            <p class ="category-card">${joke.categories}</p>
             </div>
             </div>`
+            }
+            else{
+                jokesContainer.innerHTML = `<div class = "joke-card">
+            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${jokes.id}">${jokes.id}</a></span>
+            <p class="joke-text">${jokes.value}</p>
+            <div class = "card-box-inf">
+            <p class="update-inf-card">Last update:</p>
+            <p class ="category-card">${jokes.categories}</p>
+            </div>
+            </div>`
+            }
+            
         
     }
 
-    async function showJoke(event){
+    function randerForSearch(jokes){
+        const {result} = jokes
+        const joke = result.map((item) =>{
+            if(item.categories.length === 0){
+                return `<div class = "joke-card">
+            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}</a></span>
+            <p class="joke-text">${item.value}</p>
+            <div class = "card-box-inf">
+            <p class="update-inf-card">Last update:</p>
+            </div>
+            </div>`  
+            }
+            else{
+                return `<div class = "joke-card">
+            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}</a></span>
+            <p class="joke-text">${item.value}</p>
+            <div class = "card-box-inf">
+            <p class="update-inf-card">Last update:</p>
+            <p class ="category-card">${item.categories}</p>
+            </div>
+            </div>`
+            } 
+        }).join("")
+        jokesContainer.innerHTML = joke
+    }
+
+    
+
+        async function showJoke(event){
         event.preventDefault()
-        await getJoikes()
-        rander() 
+        const jokes = await getFetch(url)
+        // await getJoikes()
+        if(search.checked){
+            randerForSearch(jokes)
+        }
+        else{
+            rander(jokes)
+        }  
     }
     
+    searchInput.addEventListener('input' , getUrlFronInput)
     categoriesRadio.forEach(item => item.addEventListener('click' , checkedCategories))
     categories.addEventListener('click' , selectCategories)
     random.addEventListener('click' , selectRandom)

@@ -82,12 +82,6 @@ function getUrlFronInput(){
         disableGetJokeBtn()
     }
 }
-
-
-
-
-
-
     function getFetch(url){
         return fetch(url).then(data => data.json())
     }
@@ -140,7 +134,7 @@ function getUrlFronInput(){
     search.addEventListener('click' , selectSearch)
     getJokeBtn.addEventListener('click' , showJoke)
 }
-
+// test
 const formSearchJoke = FormSerchJoike(document.formSearchJoke)
 
 

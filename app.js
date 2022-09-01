@@ -3,12 +3,14 @@ const jokesFavouriteColection = []
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
 const categoriesArray = ["animal","career","celebrity","dev","explicit","fashion","food","history","money","movie","music","political","religion","science","sport","travel"]
+const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const {random , categories , search , searchInput} = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
 
 
 let url = 'https://api.chucknorris.io/jokes/random'
+let jokes
 
 random.checked = true
 
@@ -87,13 +89,24 @@ function getUrlFronInput(){
         return fetch(url).then(data => data.json())
     }
 
-    function clickedlikeBtn(event){
+    function addJokeToFavourite(event){
         const {target} = event
-        target.classList.toggle('liked-btn')
-        console.log(target)
-    }
+        const id = target.dataset.id
+        if(search.checked){
+            const {result} = jokes
+            const joke = result.filter(item => item.id === id)
+            jokesFavouriteColection.push(joke)
+        }else{
+            jokesFavouriteColection.push(jokes)
+        }
+        clearJoke(jokeFavouriteConteiner)
+        randerFavourite(jokesFavouriteColection)
 
-    function createJokeCard(item){
+    }
+    function insertElement(perentElement , position , element){
+        perentElement.insertAdjacentElement(position , element)
+    }
+    function createJokeCard(item , container , functionFromBtn){
         const jokeCard = document.createElement('div')
         jokeCard.classList.add('joke-card')
         const id = document.createElement('span')
@@ -102,40 +115,42 @@ function getUrlFronInput(){
         const link = document.createElement('a')
         link.href = `https://api.chucknorris.io/jokes/${item.id}`
         link.innerText = item.id
-        id.insertAdjacentElement("beforeend" , link)
-        jokeCard.insertAdjacentElement("afterbegin" , id)
         const likeBtn =document.createElement('button')
+        likeBtn.dataset.id = item.id 
         likeBtn.classList.add('like-btn')
-        likeBtn.addEventListener('click', clickedlikeBtn)
+        likeBtn.addEventListener('click', functionFromBtn)
         likeBtn.innerText = 'testbtn'
-        jokeCard.insertAdjacentElement("beforeend" , likeBtn)
-        likeBtn.classList.add('like-btn')
         const joke = document.createElement('p')
         joke.classList.add('joke-text')
         joke.innerText = item.value
-        jokeCard.insertAdjacentElement("beforeend" , joke)
         const boxInf = document.createElement('div')
         boxInf.classList.add('card-box-inf')
         const update = document.createElement('p')
         update.classList.add('update-inf-card')
         update.innerText = 'Last update:'
-        boxInf.insertAdjacentElement("afterbegin" , update)
         if(item.categories.length !== 0){
             const category = document.createElement('p')
             category.classList.add('category-card')
             category.innerText = item.categories
-            boxInf.insertAdjacentElement("beforeend" , category)
+            insertElement(boxInf , "beforeend" , category)
         }
-        jokeCard.insertAdjacentElement("beforeend" , boxInf)
-        jokesContainer.insertAdjacentElement("beforeend", jokeCard )
-
+        insertElement(id , "beforeend" , link)
+        insertElement(jokeCard , "afterbegin" , id)
+        insertElement(jokeCard , "beforeend" , likeBtn)
+        insertElement(jokeCard , "beforeend" , joke)
+        insertElement(boxInf , "afterbegin" , update)
+        insertElement(jokeCard , "beforeend" , boxInf)
+        insertElement(container , "beforeend" , jokeCard)
     }
 
     function rander(jokeArr){
-       jokeArr.forEach(item => createJokeCard(item))
+       jokeArr.forEach(item => createJokeCard(item , jokesContainer , addJokeToFavourite))
     }
-    function clearJoke(){
-        jokesContainer.innerHTML = ''
+    function randerFavourite(jokeArr){
+        jokeArr.forEach(item => createJokeCard(item , jokeFavouriteConteiner))
+     }
+    function clearJoke(container){
+        container.innerHTML = ''
     }
 
     
@@ -144,14 +159,15 @@ function getUrlFronInput(){
     }
         async function showJoke(event){
         event.preventDefault()
-        const jokes = await getFetch(url)
-        clearJoke()
+        jokes = await getFetch(url)
+        clearJoke(jokesContainer)
         if(search.checked){
             const {result} = jokes
             rander(result)
         }
         else{
             rander(ensureArray(jokes))
+
         }  
     }
     

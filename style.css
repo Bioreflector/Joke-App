@@ -127,6 +127,14 @@ body{
     padding: 67px 40px 46px 100px;
     border-radius: 20px;
 }
+.like-btn{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.fa-heart{
+    background-color: red;
+}
 .card-joke-id{
     color: #ABABAB;
     font-weight: 500;

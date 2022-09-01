@@ -1,12 +1,13 @@
 
 const jokesFavouriteColection = []
-
-function FormSerchJoike(form){
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
-const getJokeBtn = form.querySelector('button')
 const categoriesArray = ["animal","career","celebrity","dev","explicit","fashion","food","history","money","movie","music","political","religion","science","sport","travel"]
+const form = document.formSearchJoke
 const {random , categories , search , searchInput} = form
+const getJokeBtn = document.querySelector('.joke-find__btn')
+
+
 let url = 'https://api.chucknorris.io/jokes/random'
 
 random.checked = true
@@ -86,44 +87,71 @@ function getUrlFronInput(){
         return fetch(url).then(data => data.json())
     }
 
+    function clickedlikeBtn(event){
+        const {target} = event
+        target.classList.toggle('liked-btn')
+        console.log(target)
+    }
+
+    function createJokeCard(item){
+        const jokeCard = document.createElement('div')
+        jokeCard.classList.add('joke-card')
+        const id = document.createElement('span')
+        id.classList.add('card-joke-id')
+        id.innerText = 'ID: '
+        const link = document.createElement('a')
+        link.href = `https://api.chucknorris.io/jokes/${item.id}`
+        link.innerText = item.id
+        id.insertAdjacentElement("beforeend" , link)
+        jokeCard.insertAdjacentElement("afterbegin" , id)
+        const likeBtn =document.createElement('button')
+        likeBtn.classList.add('like-btn')
+        likeBtn.addEventListener('click', clickedlikeBtn)
+        likeBtn.innerText = 'testbtn'
+        jokeCard.insertAdjacentElement("beforeend" , likeBtn)
+        likeBtn.classList.add('like-btn')
+        const joke = document.createElement('p')
+        joke.classList.add('joke-text')
+        joke.innerText = item.value
+        jokeCard.insertAdjacentElement("beforeend" , joke)
+        const boxInf = document.createElement('div')
+        boxInf.classList.add('card-box-inf')
+        const update = document.createElement('p')
+        update.classList.add('update-inf-card')
+        update.innerText = 'Last update:'
+        boxInf.insertAdjacentElement("afterbegin" , update)
+        if(item.categories.length !== 0){
+            const category = document.createElement('p')
+            category.classList.add('category-card')
+            category.innerText = item.categories
+            boxInf.insertAdjacentElement("beforeend" , category)
+        }
+        jokeCard.insertAdjacentElement("beforeend" , boxInf)
+        jokesContainer.insertAdjacentElement("beforeend", jokeCard )
+
+    }
+
     function rander(jokeArr){
-        const joke = jokeArr.map((item) =>{
-            if(item.categories.length === 0){
-                return `<div class = "joke-card">
-            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}</a></span>
-            <p class="joke-text">${item.value}</p>
-            <div class = "card-box-inf">
-            <p class="update-inf-card">Last update:</p>
-            </div>
-            </div>`  
-            }
-            else{
-                return `<div class = "joke-card">
-            <span class="card-joke-id">ID: <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}</a></span>
-            <p class="joke-text">${item.value}</p>
-            <div class = "card-box-inf">
-            <p class="update-inf-card">Last update:</p>
-            <p class ="category-card">${item.categories}</p>
-            </div>
-            </div>`
-            } 
-        }).join("")
-        jokesContainer.innerHTML = joke
+       jokeArr.forEach(item => createJokeCard(item))
+    }
+    function clearJoke(){
+        jokesContainer.innerHTML = ''
     }
 
     
-    function ansureArray(arr){
+    function ensureArray(arr){
         return Array.isArray(arr) ? arr : [arr]
     }
         async function showJoke(event){
         event.preventDefault()
         const jokes = await getFetch(url)
+        clearJoke()
         if(search.checked){
             const {result} = jokes
             rander(result)
         }
         else{
-            rander(ansureArray(jokes))
+            rander(ensureArray(jokes))
         }  
     }
     
@@ -133,8 +161,7 @@ function getUrlFronInput(){
     random.addEventListener('click' , selectRandom)
     search.addEventListener('click' , selectSearch)
     getJokeBtn.addEventListener('click' , showJoke)
-}
-// test
-const formSearchJoke = FormSerchJoike(document.formSearchJoke)
+
+
 
 

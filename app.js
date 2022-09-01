@@ -95,7 +95,7 @@ function getUrlFronInput(){
         if(search.checked){
             const {result} = jokes
             const joke = result.filter(item => item.id === id)
-            jokesFavouriteColection.push(joke)
+            jokesFavouriteColection.push(joke[0])
         }else{
             jokesFavouriteColection.push(jokes)
         }
@@ -103,6 +103,18 @@ function getUrlFronInput(){
         randerFavourite(jokesFavouriteColection)
 
     }
+    function removeJokeToFavourite(event){
+        const {target} = event
+        const id = target.dataset.id
+        let indexElement
+        jokesFavouriteColection.forEach((item , index) =>{
+            if(item.id == id) indexElement = index
+        })
+        jokesFavouriteColection.splice(indexElement , 1)
+        clearJoke(jokeFavouriteConteiner)
+        randerFavourite(jokesFavouriteColection)
+    }
+    
     function insertElement(perentElement , position , element){
         perentElement.insertAdjacentElement(position , element)
     }
@@ -147,7 +159,7 @@ function getUrlFronInput(){
        jokeArr.forEach(item => createJokeCard(item , jokesContainer , addJokeToFavourite))
     }
     function randerFavourite(jokeArr){
-        jokeArr.forEach(item => createJokeCard(item , jokeFavouriteConteiner))
+        jokeArr.forEach(item => createJokeCard(item , jokeFavouriteConteiner ,removeJokeToFavourite))
      }
     function clearJoke(container){
         container.innerHTML = ''

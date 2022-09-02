@@ -1,5 +1,5 @@
 
-const jokesFavouriteColection = []
+const jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
 const categoriesArray = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
@@ -7,10 +7,10 @@ const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
-
-
+randerFavourite(jokesFavouriteColection)
 let url = 'https://api.chucknorris.io/jokes/random'
 let jokes
+
 
 random.checked = true
 
@@ -88,31 +88,38 @@ function getUrlFronInput() {
 function likeJoke(event){
     const { target } = event
     const id = target.dataset.id
+    console.log(target)
     target.classList.toggle('like-active')
+    if(target.classList.contains('like-active')){
+        console.log(3)
+        addJokeToFavourite(id)
+    }
+    else{
+        console.log('2')
+        removeJokeFromFavourite(id)
+    }
 }
-
-function addJokeToFavourite(event) {
-    const { target } = event
-    const id = target.dataset.id
+function addJokeToFavourite(idJoke){
     if (search.checked) {
         const { result } = jokes
-        const joke = result.filter(item => item.id === id)
+        const joke = result.filter(item => item.id === idJoke)
         jokesFavouriteColection.push(joke[0])
     } else {
         jokesFavouriteColection.push(jokes)
     }
+    saveToMemory()
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
 
 }
-function removeJokeToFavourite(event) {
-    const { target } = event
-    const id = target.dataset.id
+// спросить почему так происходит
+function removeJokeFromFavourite(idJoke) {
     let indexElement
     jokesFavouriteColection.forEach((item, index) => {
-        if (item.id == id) indexElement = index
+        if (item.id == idJoke) indexElement = index
     })
     jokesFavouriteColection.splice(indexElement, 1)
+    saveToMemory()
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
 }
@@ -159,10 +166,10 @@ function createJokeCard(item, container, functionFromBtn) {
 }
 
 function rander(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokesContainer, addJokeToFavourite))
+    jokeArr.forEach(item => createJokeCard(item, jokesContainer, likeJoke))
 }
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeToFavourite))
+    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite))
 }
 function clearJoke(container) {
     container.innerHTML = ''
@@ -194,6 +201,10 @@ categories.addEventListener('click', selectCategories)
 random.addEventListener('click', selectRandom)
 search.addEventListener('click', selectSearch)
 getJokeBtn.addEventListener('click', showJoke)
+
+function saveToMemory(){
+    localStorage.setItem('jokesFavouriteColection' , JSON.stringify(jokesFavouriteColection))   
+ }
 
 
 

@@ -139,7 +139,7 @@ function getUrlFronInput(){
         boxInf.classList.add('card-box-inf')
         const update = document.createElement('p')
         update.classList.add('update-inf-card')
-        update.innerText = 'Last update:'
+        update.innerHTML = `Last update: <b>${getTimeLastUpdate(item.updated_at)}</b>`
         if(item.categories.length !== 0){
             const category = document.createElement('p')
             category.classList.add('category-card')
@@ -189,6 +189,27 @@ function getUrlFronInput(){
     random.addEventListener('click' , selectRandom)
     search.addEventListener('click' , selectSearch)
     getJokeBtn.addEventListener('click' , showJoke)
+
+
+    // const test = new Date("2020-01-05 13:42:22.701402")
+    // console.log(test.getTime())
+    // const test2 = new Date()
+    // console.log(test2.getTime())
+    // const result = test2.getTime() - test.getTime()
+    // console.log(result)
+    
+    // var days = parseInt(result / (1000 * 60 * 60 * 24));
+    // console.log(days) 
+    
+    function getTimeLastUpdate(timeLastUpdate){
+        const timeUpdate = new Date(timeLastUpdate)
+        const time = new Date()
+        const timeDifference = time.getTime() - timeUpdate.getTime()
+        const daysAgo = parseInt(timeDifference / (1000 * 60 * 60 * 24))
+        return daysAgo
+    }
+    
+   
 
 
 

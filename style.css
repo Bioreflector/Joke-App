@@ -135,8 +135,21 @@ body{
     right: 10px;
     top: 10px;
 }
-.fa-heart{
-    background-color: red;
+.box-card-icon{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    left: 40px;
+    top: 67px;
+}
+.box-card-icon img{
+    width: 20px;
+    height: 18.4px;
 }
 .card-joke-id{
     color: #ABABAB;
@@ -149,6 +162,9 @@ body{
 .card-joke-id a{
     color: #8EA7FF;
     font-weight: 400;
+}
+.card-joke-id img{
+    margin-left: 5px;
 }
 .joke-text{
     font-size: 18px;
@@ -218,4 +234,11 @@ body{
     color: #333333;
     margin-bottom: 20px;
 }
+.favourite-container .box-card-icon{
+    background-color:#F8F8F8;
+    left: 20px;
+    top: 47px;
+}
+
+
 

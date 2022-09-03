@@ -1,5 +1,5 @@
 
-const jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
+let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
 const categoriesArray = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
@@ -11,9 +11,6 @@ randerFavourite(jokesFavouriteColection)
 let url = 'https://api.chucknorris.io/jokes/random'
 let jokes
 
-
-random.checked = true
-
 function disableGetJokeBtn() {
     getJokeBtn.disabled = true
     getJokeBtn.classList.add('joke-find__btn_disabled')
@@ -22,7 +19,6 @@ function enableGetJokeBtn() {
     getJokeBtn.disabled = false
     getJokeBtn.classList.remove('joke-find__btn_disabled')
 }
-
 function randerCategory(categoriesArray) {
     const categoriesList = categoriesArray.map((item) => {
         if (categoriesArray.indexOf(item) === 0) {
@@ -54,7 +50,6 @@ function selectSearch() {
     searchInput.classList.remove('hide-search-field')
     disableGetJokeBtn()
 }
-
 const categoriesRadio = document.querySelectorAll('.radio-categories')
 
 function checkedCategories() {
@@ -85,21 +80,16 @@ function getUrlFronInput() {
         disableGetJokeBtn()
     }
 }
-function likeJoke(event){
+function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
-    console.log(target)
     target.classList.toggle('like-active')
-    if(target.classList.contains('like-active')){
-        console.log(3)
-        addJokeToFavourite(id)
-    }
-    else{
-        console.log('2')
-        removeJokeFromFavourite(id)
-    }
+    if (target.classList.contains('like-active')) addJokeToFavourite(id)
+    else removeJokeFromFavourite(id)
+
 }
-function addJokeToFavourite(idJoke){
+
+function addJokeToFavourite(idJoke) {
     if (search.checked) {
         const { result } = jokes
         const joke = result.filter(item => item.id === idJoke)
@@ -112,13 +102,18 @@ function addJokeToFavourite(idJoke){
     randerFavourite(jokesFavouriteColection)
 
 }
-// спросить почему так происходит
+function removeFromFavor(event) {
+    const { target } = event
+    const id = target.dataset.id
+    removeJokeFromFavourite(id)
+}
+
 function removeJokeFromFavourite(idJoke) {
-    let indexElement
-    jokesFavouriteColection.forEach((item, index) => {
-        if (item.id == idJoke) indexElement = index
+    jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
+        if (item.id !== idJoke) {
+            return item
+        }
     })
-    jokesFavouriteColection.splice(indexElement, 1)
     saveToMemory()
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
@@ -169,7 +164,7 @@ function rander(jokeArr) {
     jokeArr.forEach(item => createJokeCard(item, jokesContainer, likeJoke))
 }
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite))
+    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeFromFavor))
 }
 function clearJoke(container) {
     container.innerHTML = ''
@@ -178,9 +173,12 @@ function clearJoke(container) {
 function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
 }
-function getFetch(url) {
-    return fetch(url).then(data => data.json())
+async function getFetch(urljoke) {
+    const resopnse = await fetch(urljoke)
+    const joke = await resopnse.json()
+    return joke
 }
+
 async function showJoke(event) {
     event.preventDefault()
     jokes = await getFetch(url)
@@ -194,7 +192,6 @@ async function showJoke(event) {
 
     }
 }
-
 searchInput.addEventListener('input', getUrlFronInput)
 categoriesRadio.forEach(item => item.addEventListener('click', checkedCategories))
 categories.addEventListener('click', selectCategories)
@@ -202,9 +199,9 @@ random.addEventListener('click', selectRandom)
 search.addEventListener('click', selectSearch)
 getJokeBtn.addEventListener('click', showJoke)
 
-function saveToMemory(){
-    localStorage.setItem('jokesFavouriteColection' , JSON.stringify(jokesFavouriteColection))   
- }
+function saveToMemory() {
+    localStorage.setItem('jokesFavouriteColection', JSON.stringify(jokesFavouriteColection))
+}
 
 
 

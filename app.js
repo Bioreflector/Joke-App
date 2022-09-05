@@ -1,5 +1,8 @@
 
 let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
+if(jokesFavouriteColection === null){
+    jokesFavouriteColection = []
+}
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
 const categoriesArray = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
@@ -9,7 +12,44 @@ const { random, categories, search, searchInput } = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
 randerFavourite(jokesFavouriteColection)
 let url = 'https://api.chucknorris.io/jokes/random'
+const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 let jokes
+
+getCategories(urlCategory)
+
+async function getCategories(urlCategory){
+    const response = await fetch(urlCategory)
+    const categoriesArray = await response.json()
+       randerCategory(categoriesArray)
+   }
+   
+
+
+   function createCategory(category){
+    const labelCateegory = document.createElement('label')
+    labelCateegory.for = category
+    labelCateegory.innerText = category
+    labelCateegory.classList.add('categories-lable')
+    const inputCategory = document.createElement('input')
+    inputCategory.type = 'radio'
+    inputCategory.name = 'categoriesRadio'
+    inputCategory.id = category
+    inputCategory.classList.add('radio-categories')
+    inputCategory.addEventListener('click' , checkedCategories)
+    inputCategory.value = category
+    labelCateegory.insertAdjacentElement('beforeend' , inputCategory)
+    return labelCateegory
+}
+
+function randerCategory(categoriesArray) {
+    const categoriesList = categoriesArray.map((item) => {
+        return createCategory(item)
+    })
+    categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
+}
+
+
+
 
 function disableGetJokeBtn() {
     getJokeBtn.disabled = true
@@ -19,19 +59,6 @@ function enableGetJokeBtn() {
     getJokeBtn.disabled = false
     getJokeBtn.classList.remove('joke-find__btn_disabled')
 }
-function randerCategory(categoriesArray) {
-    const categoriesList = categoriesArray.map((item) => {
-        if (categoriesArray.indexOf(item) === 0) {
-            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories" checked>${item}</label>`
-        }
-        else {
-            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories">${item}</label>`
-        }
-
-    }).join('')
-    categoriesContainer.innerHTML = categoriesList
-}
-randerCategory(categoriesArray)
 
 function selectRandom() {
     searchInput.classList.add('hide-search-field')
@@ -50,9 +77,10 @@ function selectSearch() {
     searchInput.classList.remove('hide-search-field')
     disableGetJokeBtn()
 }
-const categoriesRadio = document.querySelectorAll('.radio-categories')
+
 
 function checkedCategories() {
+    const categoriesRadio = document.querySelectorAll('.radio-categories')
     categoriesRadio.forEach((category) => {
         if (!category.checked) {
             category.parentElement.classList.remove('active-radio')
@@ -193,7 +221,6 @@ async function showJoke(event) {
     }
 }
 searchInput.addEventListener('input', getUrlFronInput)
-categoriesRadio.forEach(item => item.addEventListener('click', checkedCategories))
 categories.addEventListener('click', selectCategories)
 random.addEventListener('click', selectRandom)
 search.addEventListener('click', selectSearch)

@@ -45,9 +45,6 @@ function randerCategory(categoriesArray) {
     categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
 }
 
-
-
-
 function disableGetJokeBtn() {
     getJokeBtn.disabled = true
     getJokeBtn.classList.add('joke-find__btn_disabled')
@@ -60,6 +57,7 @@ function enableGetJokeBtn() {
 function selectRandom() {
     searchInput.classList.add('hide-search-field')
     categoriesContainer.classList.add('hide-categories')
+    searchInput.value = ''
     getUrlFromRandom()
     enableGetJokeBtn()
 }
@@ -67,6 +65,7 @@ function selectCategories() {
     categoriesContainer.classList.remove('hide-categories')
     searchInput.classList.add('hide-search-field')
     enableGetJokeBtn()
+    searchInput.value = ''
 
 }
 function selectSearch() {
@@ -110,16 +109,35 @@ function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
     target.classList.toggle('like-active')
-    if (target.classList.contains('like-active')) addJokeToFavourite(id)
-    else removeJokeFromFavourite(id)
+    if (target.classList.contains('like-active') && true == dublikateCheck(id)){
+        addJokeToFavourite(id)
+    } 
+    else{
+        removeJokeFromFavourite(id)
+    } 
 
+}
+function dublikateCheck(idJoke){
+    let dublikate = false
+    if(jokesFavouriteColection.length == 0){
+        dublikate = true 
+    }
+    else{
+        jokesFavouriteColection.forEach((item) =>{
+            console.log(item)
+            if(item.id !== idJoke) {
+                dublikate = true 
+             }
+        })
+    }
+    return dublikate
 }
 
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
-        const { result } = jokes
-        const joke = result.filter(item => item.id === idJoke)
+        const joke = jokes.filter(item => item.id === idJoke)
         jokesFavouriteColection.push(joke[0])
+        
     } else {
         jokesFavouriteColection.push(jokes)
     }
@@ -208,7 +226,8 @@ async function showJoke(event) {
     clearJoke(jokesContainer)
     if (search.checked) {
         const { result } = jokes
-        rander(result)
+        jokes = result
+        rander(jokes)
     }
     else {
         rander(ensureArray(jokes))

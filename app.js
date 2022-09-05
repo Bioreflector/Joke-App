@@ -9,11 +9,13 @@ const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
-randerFavourite(jokesFavouriteColection)
+const srcLikeBtn = "images/like.png"
+const srcLikeBtnActive = 'images/like-active.png'
 let url = 'https://api.chucknorris.io/jokes/random'
 const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 let jokes
 
+randerFavourite(jokesFavouriteColection)
 getCategories(urlCategory)
 
 async function getCategories(urlCategory){
@@ -108,28 +110,33 @@ function getUrlFronInput() {
 function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
-    target.classList.toggle('like-active')
-    if (target.classList.contains('like-active') && true == dublikateCheck(id)){
+    // target.classList.toggle('like-active')
+    if (dublikateCheck(id)){
         addJokeToFavourite(id)
     } 
     else{
         removeJokeFromFavourite(id)
-    } 
-
+    }
+    clearJoke(jokesContainer)
+    rander(ensureArray(jokes))
+    
 }
+// target.classList.contains('like-active')
+
 function dublikateCheck(idJoke){
-    let dublikate = false
-    if(jokesFavouriteColection.length == 0){
-        dublikate = true 
+    const dublikate = []
+    if(jokesFavouriteColection.length === 0){
+        dublikate.push(true)
     }
     else{
         jokesFavouriteColection.forEach((item) =>{
-            if(item.id !== idJoke) {
-                dublikate = true 
+            if(item.id == idJoke) {
+                dublikate.push(false)
              }
         })
     }
-    return dublikate
+    
+    return dublikate.includes(false) ? false : true
 }
 
 function addJokeToFavourite(idJoke) {
@@ -149,6 +156,8 @@ function removeFromFavor(event) {
     const { target } = event
     const id = target.dataset.id
     removeJokeFromFavourite(id)
+    clearJoke(jokesContainer)
+    rander(ensureArray(jokes))
 }
 
 function removeJokeFromFavourite(idJoke) {
@@ -200,12 +209,18 @@ function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     jokeCard.insertAdjacentElement("beforeend", boxInf)
     container.insertAdjacentElement("beforeend", jokeCard)
 }
-const srcLikeBtn = "images/like.png"
-const srcLikeBtnActive = 'images/like-active.png'
+
 
 function rander(jokeArr) {
     jokeArr.forEach((item) =>{
-        createJokeCard(item, jokesContainer, likeJoke , srcLikeBtn)
+        const {id} = item
+         if(dublikateCheck(id)){
+            createJokeCard(item, jokesContainer, likeJoke , srcLikeBtn)
+        }
+        else{
+            createJokeCard(item, jokesContainer, likeJoke , srcLikeBtnActive)
+        }
+        
     }) 
 }
 function randerFavourite(jokeArr) {

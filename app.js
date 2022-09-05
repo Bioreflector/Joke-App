@@ -5,7 +5,6 @@ if(jokesFavouriteColection === null){
 }
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
-const categoriesArray = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
 const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
@@ -23,8 +22,6 @@ async function getCategories(urlCategory){
        randerCategory(categoriesArray)
    }
    
-
-
    function createCategory(category){
     const labelCateegory = document.createElement('label')
     labelCateegory.for = category
@@ -92,6 +89,7 @@ function checkedCategories() {
         }
     })
 }
+
 function getUrlFromCategories(category) {
     url = `https://api.chucknorris.io/jokes/random?category=${category.value}`
 }
@@ -147,9 +145,6 @@ function removeJokeFromFavourite(idJoke) {
     randerFavourite(jokesFavouriteColection)
 }
 
-function insertElement(perentElement, position, element) {
-    perentElement.insertAdjacentElement(position, element)
-}
 function getTimeLastUpdate(timeLastUpdate) {
     const timeUpdate = new Date(timeLastUpdate)
     const time = new Date()
@@ -180,12 +175,12 @@ function createJokeCard(item, container, functionFromBtn) {
         const category = document.createElement('p')
         category.classList.add('category-card')
         category.innerText = item.categories
-        insertElement(boxInf, "beforeend", category)
+        boxInf.insertAdjacentElement("beforeend", category)
     }
-    insertElement(jokeCard, "beforeend", likeBtn)
-    insertElement(boxInf, "afterbegin", update)
-    insertElement(jokeCard, "beforeend", boxInf)
-    insertElement(container, "beforeend", jokeCard)
+    jokeCard.insertAdjacentElement("beforeend", likeBtn)
+    boxInf.insertAdjacentElement("afterbegin", update)
+    jokeCard.insertAdjacentElement("beforeend", boxInf)
+    container.insertAdjacentElement("beforeend", jokeCard)
 }
 
 function rander(jokeArr) {

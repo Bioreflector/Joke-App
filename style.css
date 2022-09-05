@@ -134,9 +134,10 @@ body{
     position: absolute;
     right: 10px;
     top: 10px;
+    background-color: #ffffff00;
 }
 .like-active{
-    background-color: #8EA7FF;
+    
 }
 .box-card-icon{
     position: absolute;

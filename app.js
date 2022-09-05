@@ -124,7 +124,6 @@ function dublikateCheck(idJoke){
     }
     else{
         jokesFavouriteColection.forEach((item) =>{
-            console.log(item)
             if(item.id !== idJoke) {
                 dublikate = true 
              }
@@ -170,7 +169,7 @@ function getTimeLastUpdate(timeLastUpdate) {
     const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
     return hoursAgo
 }
-function createJokeCard(item, container, functionFromBtn) {
+function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
@@ -179,11 +178,12 @@ function createJokeCard(item, container, functionFromBtn) {
         <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}<img src="images/link.png" alt="link"></a>
         </span>
         <p class ="joke-text">${item.value}</p>`
-    const likeBtn = document.createElement('button')
+    const likeBtn = document.createElement('img')
+    likeBtn.src = likeBtnSrc
+    likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
     likeBtn.addEventListener('click', functionFromBtn)
-    likeBtn.innerText = 'testbtn'
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
@@ -200,12 +200,16 @@ function createJokeCard(item, container, functionFromBtn) {
     jokeCard.insertAdjacentElement("beforeend", boxInf)
     container.insertAdjacentElement("beforeend", jokeCard)
 }
+const srcLikeBtn = "images/like.png"
+const srcLikeBtnActive = 'images/like-active.png'
 
 function rander(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokesContainer, likeJoke))
+    jokeArr.forEach((item) =>{
+        createJokeCard(item, jokesContainer, likeJoke , srcLikeBtn)
+    }) 
 }
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeFromFavor))
+    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeFromFavor ,srcLikeBtnActive))
 }
 function clearJoke(container) {
     container.innerHTML = ''

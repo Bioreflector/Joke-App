@@ -1,15 +1,53 @@
 
 let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
+if(jokesFavouriteColection === null){
+    jokesFavouriteColection = []
+}
 const jokesContainer = document.querySelector('.jokes-container')
 const categoriesContainer = document.querySelector('.categories-container')
-const categoriesArray = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
 const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
-randerFavourite(jokesFavouriteColection)
+const srcImgLike = {
+    imgLike: "images/like.png",
+    ImgLikeActive: "images/like-active.png"
+}
 let url = 'https://api.chucknorris.io/jokes/random'
+const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 let jokes
+
+randerFavourite(jokesFavouriteColection)
+getCategories(urlCategory)
+
+async function getCategories(urlCategory){
+    const response = await fetch(urlCategory)
+    const categoriesArray = await response.json()
+       randerCategory(categoriesArray)
+   }
+   
+   function createCategory(category){
+    const labelCateegory = document.createElement('label')
+    labelCateegory.for = category
+    labelCateegory.innerText = category
+    labelCateegory.classList.add('categories-lable')
+    const inputCategory = document.createElement('input')
+    inputCategory.type = 'radio'
+    inputCategory.name = 'categoriesRadio'
+    inputCategory.id = category
+    inputCategory.classList.add('radio-categories')
+    inputCategory.addEventListener('click' , checkedCategories)
+    inputCategory.value = category
+    labelCateegory.insertAdjacentElement('beforeend' , inputCategory)
+    return labelCateegory
+}
+
+function randerCategory(categoriesArray) {
+    const categoriesList = categoriesArray.map((item) => {
+        return createCategory(item)
+    })
+    categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
+}
 
 function disableGetJokeBtn() {
     getJokeBtn.disabled = true
@@ -19,23 +57,11 @@ function enableGetJokeBtn() {
     getJokeBtn.disabled = false
     getJokeBtn.classList.remove('joke-find__btn_disabled')
 }
-function randerCategory(categoriesArray) {
-    const categoriesList = categoriesArray.map((item) => {
-        if (categoriesArray.indexOf(item) === 0) {
-            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories" checked>${item}</label>`
-        }
-        else {
-            return `<label for="${item}" class = "categories-lable"><input type = "radio" id ="${item}" name = "categoriesRadio" value = "${item}" class = "radio-categories">${item}</label>`
-        }
-
-    }).join('')
-    categoriesContainer.innerHTML = categoriesList
-}
-randerCategory(categoriesArray)
 
 function selectRandom() {
     searchInput.classList.add('hide-search-field')
     categoriesContainer.classList.add('hide-categories')
+    searchInput.value = ''
     getUrlFromRandom()
     enableGetJokeBtn()
 }
@@ -43,6 +69,7 @@ function selectCategories() {
     categoriesContainer.classList.remove('hide-categories')
     searchInput.classList.add('hide-search-field')
     enableGetJokeBtn()
+    searchInput.value = ''
 
 }
 function selectSearch() {
@@ -50,9 +77,10 @@ function selectSearch() {
     searchInput.classList.remove('hide-search-field')
     disableGetJokeBtn()
 }
-const categoriesRadio = document.querySelectorAll('.radio-categories')
+
 
 function checkedCategories() {
+    const categoriesRadio = document.querySelectorAll('.radio-categories')
     categoriesRadio.forEach((category) => {
         if (!category.checked) {
             category.parentElement.classList.remove('active-radio')
@@ -64,6 +92,7 @@ function checkedCategories() {
         }
     })
 }
+
 function getUrlFromCategories(category) {
     url = `https://api.chucknorris.io/jokes/random?category=${category.value}`
 }
@@ -83,32 +112,50 @@ function getUrlFronInput() {
 function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
-    target.classList.toggle('like-active')
-    if (target.classList.contains('like-active')) addJokeToFavourite(id)
-    else removeJokeFromFavourite(id)
+    if (checkFavouriteJokes(id)){
+        addJokeToFavourite(id)
+    } 
+    else{
+        removeJoke(id)
+    }
+    clearJoke(jokesContainer)
+    rander(jokes)
+    
+}
 
+function checkFavouriteJokes(idJoke){
+    const status= [true]
+    jokesFavouriteColection.filter((item) =>{
+            if(item.id == idJoke) status.push(false)
+        })
+    return status.includes(false) ? false : true
 }
 
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
-        const { result } = jokes
-        const joke = result.filter(item => item.id === idJoke)
-        jokesFavouriteColection.push(joke[0])
+        const joke = jokes.filter(item => item.id === idJoke)
+        jokesFavouriteColection.push(...joke)
+        
     } else {
-        jokesFavouriteColection.push(jokes)
+        jokesFavouriteColection.push(...jokes)
     }
     saveToMemory()
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
 
 }
-function removeFromFavor(event) {
+function removeJokeFromFavourite(event) {
     const { target } = event
     const id = target.dataset.id
-    removeJokeFromFavourite(id)
+    removeJoke(id)
+    if(jokes !== undefined){
+    clearJoke(jokesContainer)
+    rander(jokes)
+    }
+    
 }
 
-function removeJokeFromFavourite(idJoke) {
+function removeJoke(idJoke) {
     jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
         if (item.id !== idJoke) {
             return item
@@ -119,9 +166,6 @@ function removeJokeFromFavourite(idJoke) {
     randerFavourite(jokesFavouriteColection)
 }
 
-function insertElement(perentElement, position, element) {
-    perentElement.insertAdjacentElement(position, element)
-}
 function getTimeLastUpdate(timeLastUpdate) {
     const timeUpdate = new Date(timeLastUpdate)
     const time = new Date()
@@ -129,7 +173,7 @@ function getTimeLastUpdate(timeLastUpdate) {
     const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
     return hoursAgo
 }
-function createJokeCard(item, container, functionFromBtn) {
+function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
@@ -138,11 +182,12 @@ function createJokeCard(item, container, functionFromBtn) {
         <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}<img src="images/link.png" alt="link"></a>
         </span>
         <p class ="joke-text">${item.value}</p>`
-    const likeBtn = document.createElement('button')
+    const likeBtn = document.createElement('img')
+    likeBtn.src = likeBtnSrc
+    likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
     likeBtn.addEventListener('click', functionFromBtn)
-    likeBtn.innerText = 'testbtn'
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
@@ -152,19 +197,29 @@ function createJokeCard(item, container, functionFromBtn) {
         const category = document.createElement('p')
         category.classList.add('category-card')
         category.innerText = item.categories
-        insertElement(boxInf, "beforeend", category)
+        boxInf.insertAdjacentElement("beforeend", category)
     }
-    insertElement(jokeCard, "beforeend", likeBtn)
-    insertElement(boxInf, "afterbegin", update)
-    insertElement(jokeCard, "beforeend", boxInf)
-    insertElement(container, "beforeend", jokeCard)
+    jokeCard.insertAdjacentElement("beforeend", likeBtn)
+    boxInf.insertAdjacentElement("afterbegin", update)
+    jokeCard.insertAdjacentElement("beforeend", boxInf)
+    container.insertAdjacentElement("beforeend", jokeCard)
 }
 
+
 function rander(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokesContainer, likeJoke))
+    jokeArr.forEach((item) =>{
+        const {id} = item
+         if(checkFavouriteJokes(id)){
+            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.imgLike)
+        }
+        else{
+            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.ImgLikeActive)
+        }
+        
+    }) 
 }
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeFromFavor))
+    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite , srcImgLike.ImgLikeActive))
 }
 function clearJoke(container) {
     container.innerHTML = ''
@@ -185,15 +240,18 @@ async function showJoke(event) {
     clearJoke(jokesContainer)
     if (search.checked) {
         const { result } = jokes
-        rander(result)
+        jokes = result
+        rander(jokes)
+        
     }
     else {
-        rander(ensureArray(jokes))
+        jokes = ensureArray((jokes))
+        rander(jokes)
+
 
     }
 }
 searchInput.addEventListener('input', getUrlFronInput)
-categoriesRadio.forEach(item => item.addEventListener('click', checkedCategories))
 categories.addEventListener('click', selectCategories)
 random.addEventListener('click', selectRandom)
 search.addEventListener('click', selectSearch)

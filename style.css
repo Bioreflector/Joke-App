@@ -29,6 +29,7 @@ body{
 }
 .favourite-show-btn{
     position: absolute;
+    font-weight: normal;
     right: 40px;
     top: 40px;
     display: none;
@@ -36,14 +37,65 @@ body{
     background-color: transparent;
     border: none;
     cursor: pointer;
-
+    font-weight: 500;
 }
-.favourite-show-btn span{
+
+.favoruite-btn-text{
     font-size: 20px;
     font-weight: 500;
     line-height: 28px;
     color: #ABABAB;
 }
+.favoruite-btn-animation{
+    width: 28px;
+    height: 28px;
+    background-color: black;
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    
+}
+.favoruite-btn-animation::after{
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    background-color: white;
+    left: 7px;
+    top: 10px;
+    transition: all ease 0.3s;
+}
+.favoruite-btn-animation::before{
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    background-color: white;
+    left: 7px;
+    top: 16px;
+    transition: all ease 0.3s;
+}
+.favourite-show-btn_active .favoruite-btn-animation::before{
+    transform: rotate(-45deg);
+    top: 12px;
+}
+.favourite-show-btn_active .favoruite-btn-animation::after{
+    transform: rotate(45deg);
+    top: 12px;
+}
+.label-For-Search-type{
+    font-size: 18px;
+    color: #333333;
+    line-height: 26px;
+    font-weight: 400;
+}
+#random , #categories , #search{
+    position: relative;
+    width: 20px;
+    height: 20px;
+    accent-color: black;
+}
+
 .work-place-title{
     font-size: 32px;
     font-weight: 700;
@@ -60,6 +112,11 @@ body{
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
+}
+.input-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .categories-container{
    display: flex;
@@ -134,10 +191,9 @@ body{
     position: absolute;
     right: 10px;
     top: 10px;
+    background-color: #ffffff00;
 }
-.like-active{
-    background-color: #8EA7FF;
-}
+
 .box-card-icon{
     position: absolute;
     display: flex;
@@ -242,6 +298,7 @@ body{
     left: 20px;
     top: 47px;
 }
+
 
 
 

@@ -9,8 +9,10 @@ const jokeFavouriteConteiner = document.querySelector('.favourite-container')
 const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
 const getJokeBtn = document.querySelector('.joke-find__btn')
-const srcLikeBtn = "images/like.png"
-const srcLikeBtnActive = 'images/like-active.png'
+const srcImgLike = {
+    imgLike: "images/like.png",
+    ImgLikeActive: "images/like-active.png"
+}
 let url = 'https://api.chucknorris.io/jokes/random'
 const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 let jokes
@@ -110,57 +112,50 @@ function getUrlFronInput() {
 function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
-    // target.classList.toggle('like-active')
-    if (dublikateCheck(id)){
+    if (checkFavouriteJokes(id)){
         addJokeToFavourite(id)
     } 
     else{
-        removeJokeFromFavourite(id)
+        removeJoke(id)
     }
     clearJoke(jokesContainer)
-    rander(ensureArray(jokes))
+    rander(jokes)
     
 }
-// target.classList.contains('like-active')
 
-function dublikateCheck(idJoke){
-    const dublikate = []
-    if(jokesFavouriteColection.length === 0){
-        dublikate.push(true)
-    }
-    else{
-        jokesFavouriteColection.forEach((item) =>{
-            if(item.id == idJoke) {
-                dublikate.push(false)
-             }
+function checkFavouriteJokes(idJoke){
+    const status= [true]
+    jokesFavouriteColection.filter((item) =>{
+            if(item.id == idJoke) status.push(false)
         })
-    }
-    
-    return dublikate.includes(false) ? false : true
+    return status.includes(false) ? false : true
 }
 
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
         const joke = jokes.filter(item => item.id === idJoke)
-        jokesFavouriteColection.push(joke[0])
+        jokesFavouriteColection.push(...joke)
         
     } else {
-        jokesFavouriteColection.push(jokes)
+        jokesFavouriteColection.push(...jokes)
     }
     saveToMemory()
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
 
 }
-function removeFromFavor(event) {
+function removeJokeFromFavourite(event) {
     const { target } = event
     const id = target.dataset.id
-    removeJokeFromFavourite(id)
+    removeJoke(id)
+    if(jokes !== undefined){
     clearJoke(jokesContainer)
-    rander(ensureArray(jokes))
+    rander(jokes)
+    }
+    
 }
 
-function removeJokeFromFavourite(idJoke) {
+function removeJoke(idJoke) {
     jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
         if (item.id !== idJoke) {
             return item
@@ -214,17 +209,17 @@ function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
 function rander(jokeArr) {
     jokeArr.forEach((item) =>{
         const {id} = item
-         if(dublikateCheck(id)){
-            createJokeCard(item, jokesContainer, likeJoke , srcLikeBtn)
+         if(checkFavouriteJokes(id)){
+            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.imgLike)
         }
         else{
-            createJokeCard(item, jokesContainer, likeJoke , srcLikeBtnActive)
+            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.ImgLikeActive)
         }
         
     }) 
 }
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeFromFavor ,srcLikeBtnActive))
+    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite , srcImgLike.ImgLikeActive))
 }
 function clearJoke(container) {
     container.innerHTML = ''
@@ -247,9 +242,12 @@ async function showJoke(event) {
         const { result } = jokes
         jokes = result
         rander(jokes)
+        
     }
     else {
-        rander(ensureArray(jokes))
+        jokes = ensureArray((jokes))
+        rander(jokes)
+
 
     }
 }

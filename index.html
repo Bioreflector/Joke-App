@@ -16,23 +16,25 @@
         <main class="main">
             <div class="work-place">
                 <p class="msi">MSI 2020</p>
-                <button class="favourite-show-btn"><span>Favourite</span></button>
+                <button class="favourite-show-btn"><span class = 'favoruite-btn-animation'></span><div class="favoruite-btn-text">Favourite</div></button>
                 <h2 class="work-place-title">Hey! <span>Let’s try to find a joke for you:</span></h2>
                 <form action="" id="joke-find" name="formSearchJoke">
                     <div class="radio-box">
-                        <label for="random" class="">
+                        <div class="input-box">
                             <input type="radio" id="random" name="getJoke" value="random" checked>
-                            Random
-                        </label>
-                        <label for="categories">
-                            <input type="radio" id="categories" name="getJoke" value="categories">
-                            From categories</label>
-                        <div class="categories-container hide-categories">
+                            <label for="random" class="label-For-Search-type">Random</label>
+                            
                         </div>
-                        <label for="search">
+                        <div class="input-box">
+                            <input type="radio" id="categories" name="getJoke" value="categories">
+                            <label for="categories" class="label-For-Search-type">From categories</label>
+                        </div>
+                        <div class="categories-container hide-categories"></div>
+                        <div class="input-box">
                             <input type="radio" id="search" name="getJoke" value="search">
-                            Search</label>
-                            <input type="text" id="searchInput" class="hide-search-field" placeholder="Free text search">
+                            <label for="search" class="label-For-Search-type">Search</label>
+                        </div>
+                        <input type="text" id="searchInput" class="hide-search-field" placeholder="Free text search">
                     </div>
                     <button class="joke-find__btn">Get a joke</button>
                 </form>
@@ -49,6 +51,7 @@
             </div>
             
         </main>
+        <button class="test">test</button>
     </div>
     <script src="responsive.js"></script>
     <script src="app.js"></script>

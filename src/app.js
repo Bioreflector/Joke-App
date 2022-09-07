@@ -1,10 +1,13 @@
 import {getJokeBtn,jokesContainer,categoriesContainer,jokeFavouriteConteiner,form} from "./selectors"
 import {disableGetJokeBtn , enableGetJokeBtn ,getTimeLastUpdate ,clearJoke,ensureArray} from "./helpers"
+import {urlCategory} from "./config"
+import {checkFavouriteJokes} from "./check"
 
-let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
+export let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 if(jokesFavouriteColection === null){
     jokesFavouriteColection = []
 }
+
 const { random, categories, search, searchInput } = form
 
 const srcImgLike = {
@@ -12,7 +15,6 @@ const srcImgLike = {
     ImgLikeActive: "images/like-active.png"
 }
 let url = 'https://api.chucknorris.io/jokes/random'
-const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 let jokes
 
 randerFavourite(jokesFavouriteColection)
@@ -112,13 +114,7 @@ function likeJoke(event) {
     rander(jokes)
     
 }
-function checkFavouriteJokes(idJoke){
-    const status= [true]
-    jokesFavouriteColection.filter((item) =>{
-            if(item.id == idJoke) status.push(false)
-        })
-    return status.includes(false) ? false : true
-}
+
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
         const joke = jokes.filter(item => item.id === idJoke)

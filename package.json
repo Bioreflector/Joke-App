@@ -1,0 +1,23 @@
+{
+  "name": "joke-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bioreflector/Joke-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bioreflector/Joke-App/issues"
+  },
+  "homepage": "https://github.com/Bioreflector/Joke-App#readme",
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  }
+}

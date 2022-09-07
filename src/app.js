@@ -1,14 +1,12 @@
+import {getJokeBtn,jokesContainer,categoriesContainer,jokeFavouriteConteiner,form} from "./selectors"
+import {disableGetJokeBtn , enableGetJokeBtn ,getTimeLastUpdate ,clearJoke,ensureArray} from "./helpers"
 
 let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 if(jokesFavouriteColection === null){
     jokesFavouriteColection = []
 }
-const jokesContainer = document.querySelector('.jokes-container')
-const categoriesContainer = document.querySelector('.categories-container')
-const jokeFavouriteConteiner = document.querySelector('.favourite-container')
-const form = document.formSearchJoke
 const { random, categories, search, searchInput } = form
-const getJokeBtn = document.querySelector('.joke-find__btn')
+
 const srcImgLike = {
     imgLike: "images/like.png",
     ImgLikeActive: "images/like-active.png"
@@ -49,14 +47,6 @@ function randerCategory(categoriesArray) {
     categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
 }
 
-function disableGetJokeBtn() {
-    getJokeBtn.disabled = true
-    getJokeBtn.classList.add('joke-find__btn_disabled')
-}
-function enableGetJokeBtn() {
-    getJokeBtn.disabled = false
-    getJokeBtn.classList.remove('joke-find__btn_disabled')
-}
 
 function selectRandom() {
     searchInput.classList.add('hide-search-field')
@@ -122,7 +112,6 @@ function likeJoke(event) {
     rander(jokes)
     
 }
-
 function checkFavouriteJokes(idJoke){
     const status= [true]
     jokesFavouriteColection.filter((item) =>{
@@ -130,7 +119,6 @@ function checkFavouriteJokes(idJoke){
         })
     return status.includes(false) ? false : true
 }
-
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
         const joke = jokes.filter(item => item.id === idJoke)
@@ -166,13 +154,8 @@ function removeJoke(idJoke) {
     randerFavourite(jokesFavouriteColection)
 }
 
-function getTimeLastUpdate(timeLastUpdate) {
-    const timeUpdate = new Date(timeLastUpdate)
-    const time = new Date()
-    const timeDifference = time.getTime() - timeUpdate.getTime()
-    const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
-    return hoursAgo
-}
+
+
 function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
@@ -221,13 +204,7 @@ function rander(jokeArr) {
 function randerFavourite(jokeArr) {
     jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite , srcImgLike.ImgLikeActive))
 }
-function clearJoke(container) {
-    container.innerHTML = ''
-}
 
-function ensureArray(arr) {
-    return Array.isArray(arr) ? arr : [arr]
-}
 async function getFetch(urljoke) {
     const resopnse = await fetch(urljoke)
     const joke = await resopnse.json()

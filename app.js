@@ -36,7 +36,7 @@ async function getCategories(urlCategory){
     inputCategory.name = 'categoriesRadio'
     inputCategory.id = category
     inputCategory.classList.add('radio-categories')
-    inputCategory.addEventListener('click' , checkedCategories)
+    inputCategory.addEventListener('click' , сhooseCategory)
     inputCategory.value = category
     labelCateegory.insertAdjacentElement('beforeend' , inputCategory)
     return labelCateegory
@@ -79,7 +79,7 @@ function selectSearch() {
 }
 
 
-function checkedCategories() {
+function сhooseCategory() {
     const categoriesRadio = document.querySelectorAll('.radio-categories')
     categoriesRadio.forEach((category) => {
         if (!category.checked) {

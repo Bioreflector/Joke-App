@@ -1,8 +1,7 @@
  import {search , jokesContainer} from "./selectors"
- import {ensureArray , clearJoke} from "./helpers"
- import {rander} from "./app"
  import {url,urlCategory} from "./getUrl"
- import {randerCategory} from "./radner"
+ import {randerCategory,rander} from "./radner"
+ import {clearJoke,ensureArray} from "./helpers"
 
  export let jokes
 

@@ -1,4 +1,6 @@
-import {getJokeBtn} from "./selectors"
+import {getJokeBtn , searchInput , categoriesContainer} from "./selectors"
+import {getUrlFromRandom} from "./getUrl"
+
 export function disableGetJokeBtn() {
     getJokeBtn.disabled = true
     getJokeBtn.classList.add('joke-find__btn_disabled')
@@ -19,4 +21,23 @@ export function clearJoke(container) {
 }
 export function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
+}
+export function selectRandom() {
+    searchInput.classList.add('hide-search-field')
+    categoriesContainer.classList.add('hide-categories')
+    searchInput.value = ''
+    getUrlFromRandom()
+    enableGetJokeBtn()
+}
+export function selectCategories() {
+    categoriesContainer.classList.remove('hide-categories')
+    searchInput.classList.add('hide-search-field')
+    enableGetJokeBtn()
+    searchInput.value = ''
+
+}
+export function selectSearch() {
+    categoriesContainer.classList.add('hide-categories')
+    searchInput.classList.remove('hide-search-field')
+    disableGetJokeBtn()
 }

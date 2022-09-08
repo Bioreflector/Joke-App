@@ -1,22 +1,19 @@
-import {getJokeBtn,jokesContainer,categoriesContainer,jokeFavouriteConteiner,form} from "./selectors"
-import {disableGetJokeBtn , enableGetJokeBtn ,getTimeLastUpdate ,clearJoke,ensureArray} from "./helpers"
-import {urlCategory} from "./config"
+import {getJokeBtn,jokesContainer,categoriesContainer,jokeFavouriteConteiner,random, categories, search, searchInput} from "./selectors"
+import {selectRandom , selectCategories, selectSearch ,getTimeLastUpdate ,clearJoke,ensureArray} from "./helpers"
 import {checkFavouriteJokes} from "./check"
+import {urlCategory , getUrlFromCategories , url,getUrlFronInput} from "./getUrl"
 
 export let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 if(jokesFavouriteColection === null){
     jokesFavouriteColection = []
 }
 
-const { random, categories, search, searchInput } = form
-
 const srcImgLike = {
     imgLike: "images/like.png",
     ImgLikeActive: "images/like-active.png"
 }
-let url = 'https://api.chucknorris.io/jokes/random'
-let jokes
 
+let jokes
 randerFavourite(jokesFavouriteColection)
 getCategories(urlCategory)
 
@@ -49,28 +46,6 @@ function randerCategory(categoriesArray) {
     categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
 }
 
-
-function selectRandom() {
-    searchInput.classList.add('hide-search-field')
-    categoriesContainer.classList.add('hide-categories')
-    searchInput.value = ''
-    getUrlFromRandom()
-    enableGetJokeBtn()
-}
-function selectCategories() {
-    categoriesContainer.classList.remove('hide-categories')
-    searchInput.classList.add('hide-search-field')
-    enableGetJokeBtn()
-    searchInput.value = ''
-
-}
-function selectSearch() {
-    categoriesContainer.classList.add('hide-categories')
-    searchInput.classList.remove('hide-search-field')
-    disableGetJokeBtn()
-}
-
-
 function checkedCategories() {
     const categoriesRadio = document.querySelectorAll('.radio-categories')
     categoriesRadio.forEach((category) => {
@@ -83,23 +58,6 @@ function checkedCategories() {
             getUrlFromCategories(category)
         }
     })
-}
-
-function getUrlFromCategories(category) {
-    url = `https://api.chucknorris.io/jokes/random?category=${category.value}`
-}
-function getUrlFromRandom() {
-    url = 'https://api.chucknorris.io/jokes/random'
-}
-function getUrlFronInput() {
-    let valueFromInput = searchInput.value
-    url = `https://api.chucknorris.io/jokes/search?query=${valueFromInput}`
-    if (searchInput.value.length >= 3) {
-        enableGetJokeBtn()
-    }
-    else {
-        disableGetJokeBtn()
-    }
 }
 function likeJoke(event) {
     const { target } = event
@@ -149,8 +107,6 @@ function removeJoke(idJoke) {
     clearJoke(jokeFavouriteConteiner)
     randerFavourite(jokesFavouriteColection)
 }
-
-
 
 function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     const jokeCard = document.createElement('div')

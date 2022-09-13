@@ -219,6 +219,7 @@ function clearJoke(container) {
 function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
 }
+
 async function getFetch(urljoke) {
     const resopnse = await fetch(urljoke)
     const joke = await resopnse.json()

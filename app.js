@@ -170,7 +170,7 @@ function getTimeLastUpdate(timeLastUpdate) {
     const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
     return hoursAgo
 }
-function createJokeCard(item,functionFromBtn) {
+function createJokeCard(item) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
@@ -184,7 +184,12 @@ function createJokeCard(item,functionFromBtn) {
     likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
-    likeBtn.addEventListener('click', functionFromBtn)
+    if(isFavourite(item.id)){
+        likeBtn.addEventListener('click' , removeJokeFromFavourite)
+    }
+    else{
+        likeBtn.addEventListener('click' , likeJoke)
+    }
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
@@ -204,12 +209,12 @@ function createJokeCard(item,functionFromBtn) {
 
 
 function rander(jokeArr) {
-    const jokeList = jokeArr.map(item => createJokeCard(item,likeJoke)) 
+    const jokeList = jokeArr.map(item => createJokeCard(item)) 
     jokeList.forEach(item => jokesContainer.insertAdjacentElement('beforeend' , item))       
 }
 
 function randerFavourite(jokeArr) {
-    const jokeList = jokeArr.map(item => createJokeCard(item,removeJokeFromFavourite)) 
+    const jokeList = jokeArr.map(item => createJokeCard(item)) 
     jokeList.forEach(item => jokeFavouriteConteiner.insertAdjacentElement('beforeend' , item)) 
 }
 

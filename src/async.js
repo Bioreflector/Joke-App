@@ -5,12 +5,12 @@
 
  export let jokes
 
- export async function getCategories(urlCategory){
+ export async function getCategories(){
     const response = await fetch(urlCategory)
     const categoriesArray = await response.json()
        randerCategory(categoriesArray)
    }
-getCategories(urlCategory)
+getCategories()
 
  async function getFetch(urljoke) {
     const resopnse = await fetch(urljoke)
@@ -24,10 +24,10 @@ getCategories(urlCategory)
     if (search.checked) {
         const { result } = jokes
         jokes = result
-        rander(jokes)
+        rander()
     }
     else {
         jokes = ensureArray((jokes))
-        rander(jokes)
+        rander()
     }
 }

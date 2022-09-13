@@ -1,13 +1,10 @@
 import { jokesFavouriteColection } from "./app"
 import {getUrlFromCategories} from "./getUrl"
 
-export function checkFavouriteJokes(idJoke){
-    const status= [true]
-    jokesFavouriteColection.filter((item) =>{
-            if(item.id == idJoke) status.push(false)
-        })
-    return status.includes(false) ? false : true
+export function isFavourite(idJoke){
+    return jokesFavouriteColection.find((favorite) => favorite.id === idJoke);
 }
+
 export function checkedCategories() {
     const categoriesRadio = document.querySelectorAll('.radio-categories')
     categoriesRadio.forEach((category) => {

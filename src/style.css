@@ -192,6 +192,7 @@ body{
     right: 10px;
     top: 10px;
     background-color: #ffffff00;
+    cursor: pointer;
 }
 
 .box-card-icon{

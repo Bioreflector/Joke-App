@@ -1,36 +1,32 @@
 import {getJokeBtn,jokesContainer,jokeFavouriteConteiner,random, categories, search, searchInput} from "./selectors"
 import {selectRandom , selectCategories, selectSearch ,getTimeLastUpdate ,clearJoke} from "./helpers"
-import {checkFavouriteJokes} from "./check"
+import {isFavourite} from "./check"
 import {getUrlFronInput} from "./getUrl"
 import {showJoke,jokes} from "./async"
-import {rander ,createJokeCard} from "./radner"
+import {rander ,randerFavourite} from "./radner"
+
 
 export let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 if(jokesFavouriteColection === null){
     jokesFavouriteColection = []
 }
 
-export const srcImgLike = {
-    imgLike: "images/like.png",
-    ImgLikeActive: "images/like-active.png"
-}
+export const srcImgLike = "images/like.png"
+export const srcImgLikeActive = "images/like-active.png"
 
-randerFavourite(jokesFavouriteColection)
+randerFavourite()
 
-export function likeJoke(event) {
-    const { target } = event
-    const id = target.dataset.id
-    if (checkFavouriteJokes(id)){
-        addJokeToFavourite(id)
+export function likeJoke(id) {
+    if (isFavourite(id)){
+        removeJoke(id)
     } 
     else{
-        removeJoke(id)
+        addJokeToFavourite(id)
     }
-    clearJoke(jokesContainer)
+    jokesContainer.innerHTML = ""
     rander(jokes)
     
 }
-
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
         const joke = jokes.filter(item => item.id === idJoke)
@@ -40,19 +36,9 @@ function addJokeToFavourite(idJoke) {
         jokesFavouriteColection.push(...jokes)
     }
     saveToMemory()
-    clearJoke(jokeFavouriteConteiner)
-    randerFavourite(jokesFavouriteColection)
+    jokeFavouriteConteiner.innerHTML = ""
+    randerFavourite()
 
-}
-function removeJokeFromFavourite(event) {
-    const { target } = event
-    const id = target.dataset.id
-    removeJoke(id)
-    if(jokes !== undefined){
-    clearJoke(jokesContainer)
-    rander(jokes)
-    }
-    
 }
 
 function removeJoke(idJoke) {
@@ -62,14 +48,10 @@ function removeJoke(idJoke) {
         }
     })
     saveToMemory()
-    clearJoke(jokeFavouriteConteiner)
-    randerFavourite(jokesFavouriteColection)
+    jokeFavouriteConteiner.innerHTML = ""
+    randerFavourite()
 }
 
-
-function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite , srcImgLike.ImgLikeActive))
-}
 
 
 

@@ -1,7 +1,8 @@
-import {checkedCategories ,checkFavouriteJokes} from "./check"
-import {categoriesContainer,jokesContainer} from "./selectors"
+import {checkedCategories ,isFavourite} from "./check"
+import {categoriesContainer , jokesContainer , jokeFavouriteConteiner} from "./selectors"
 import {getTimeLastUpdate} from "./helpers"
-import {likeJoke,srcImgLike} from "./app"
+import {jokes} from "./async"
+import {srcImgLike,srcImgLikeActive ,likeJoke , jokesFavouriteColection} from "./app"
 
 
 function createCategory(category){
@@ -26,7 +27,7 @@ export function randerCategory(categoriesArray) {
     categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
 }
 
- export function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
+function createJokeCard(item) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
@@ -36,11 +37,11 @@ export function randerCategory(categoriesArray) {
         </span>
         <p class ="joke-text">${item.value}</p>`
     const likeBtn = document.createElement('img')
-    likeBtn.src = likeBtnSrc
+    likeBtn.src = isFavourite(item.id) ? srcImgLikeActive : srcImgLike
     likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
-    likeBtn.addEventListener('click', functionFromBtn)
+    likeBtn.addEventListener('click' , ()=> likeJoke(item.id))
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
@@ -55,19 +56,15 @@ export function randerCategory(categoriesArray) {
     jokeCard.insertAdjacentElement("beforeend", likeBtn)
     boxInf.insertAdjacentElement("afterbegin", update)
     jokeCard.insertAdjacentElement("beforeend", boxInf)
-    container.insertAdjacentElement("beforeend", jokeCard)
+    return jokeCard
 }
 
-
-export function rander(jokeArr) {
-    jokeArr.forEach((item) =>{
-        const {id} = item
-         if(checkFavouriteJokes(id)){
-            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.imgLike)
-        }
-        else{
-            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.ImgLikeActive)
-        }
-        
-    }) 
+export function rander() {
+    const jokeList = jokes.map(item => createJokeCard(item)) 
+    jokeList.forEach(item => jokesContainer.insertAdjacentElement('beforeend' , item))       
 }
+export function randerFavourite() {
+    const jokeList = jokesFavouriteColection.map(item => createJokeCard(item)) 
+    jokeList.forEach(item => jokeFavouriteConteiner.insertAdjacentElement('beforeend' , item)) 
+}
+

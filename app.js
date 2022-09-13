@@ -112,24 +112,21 @@ function getUrlFronInput() {
 function likeJoke(event) {
     const { target } = event
     const id = target.dataset.id
-    if (checkFavouriteJokes(id)){
-        addJokeToFavourite(id)
+    if (isFavourite(id)){
+        removeJoke(id)
     } 
     else{
-        removeJoke(id)
+        addJokeToFavourite(id)
     }
     clearJoke(jokesContainer)
     rander(jokes)
     
 }
 
-function checkFavouriteJokes(idJoke){
-    const status= [true]
-    jokesFavouriteColection.filter((item) =>{
-            if(item.id == idJoke) status.push(false)
-        })
-    return status.includes(false) ? false : true
+function isFavourite(idJoke){
+    return jokesFavouriteColection.find((favorite) => favorite.id === idJoke);
 }
+
 
 function addJokeToFavourite(idJoke) {
     if (search.checked) {
@@ -173,7 +170,7 @@ function getTimeLastUpdate(timeLastUpdate) {
     const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
     return hoursAgo
 }
-function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
+function createJokeCard(item,functionFromBtn) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
@@ -183,7 +180,7 @@ function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
         </span>
         <p class ="joke-text">${item.value}</p>`
     const likeBtn = document.createElement('img')
-    likeBtn.src = likeBtnSrc
+    likeBtn.src = isFavourite(item.id) ? srcImgLike.ImgLikeActive : srcImgLike.imgLike
     likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
@@ -202,29 +199,23 @@ function createJokeCard(item, container, functionFromBtn , likeBtnSrc) {
     jokeCard.insertAdjacentElement("beforeend", likeBtn)
     boxInf.insertAdjacentElement("afterbegin", update)
     jokeCard.insertAdjacentElement("beforeend", boxInf)
-    container.insertAdjacentElement("beforeend", jokeCard)
+    return jokeCard
 }
 
 
 function rander(jokeArr) {
-    jokeArr.forEach((item) =>{
-        const {id} = item
-         if(checkFavouriteJokes(id)){
-            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.imgLike)
-        }
-        else{
-            createJokeCard(item, jokesContainer, likeJoke , srcImgLike.ImgLikeActive)
-        }
-        
-    }) 
+    const jokeList = jokeArr.map(item => createJokeCard(item,likeJoke)) 
+    jokeList.forEach(item => jokesContainer.insertAdjacentElement('beforeend' , item))       
 }
+
 function randerFavourite(jokeArr) {
-    jokeArr.forEach(item => createJokeCard(item, jokeFavouriteConteiner, removeJokeFromFavourite , srcImgLike.ImgLikeActive))
+    const jokeList = jokeArr.map(item => createJokeCard(item,removeJokeFromFavourite)) 
+    jokeList.forEach(item => jokeFavouriteConteiner.insertAdjacentElement('beforeend' , item)) 
 }
+
 function clearJoke(container) {
     container.innerHTML = ''
 }
-
 function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
 }

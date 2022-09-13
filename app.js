@@ -111,9 +111,7 @@ function getUrlFronInput() {
 function isFavourite(idJoke){
     return jokesFavouriteColection.find((favorite) => favorite.id === idJoke);
 }
-function likeJoke(event) {
-    const { target } = event
-    const id = target.dataset.id
+function likeJoke(id) {
     if (isFavourite(id)){
         removeJoke(id)
     } 
@@ -171,7 +169,7 @@ function createJokeCard(item) {
     likeBtn.alt = 'like'
     likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
-    likeBtn.addEventListener('click' , likeJoke)
+    likeBtn.addEventListener('click' , ()=> likeJoke(item.id))
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
@@ -203,7 +201,7 @@ function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
 }
 
-async function getFetch(urljoke) {
+async function getJoke(urljoke) {
     const response = await fetch(urljoke)
     const joke = await response.json()
     return joke
@@ -211,7 +209,7 @@ async function getFetch(urljoke) {
 
 async function showJoke(event) {
     event.preventDefault()
-    jokes = await getFetch(url)
+    jokes = await getJoke(url)
     jokesContainer.innerHTML = ""
     if (search.checked) {
         const { result } = jokes

@@ -1,5 +1,5 @@
-import {getJokeBtn , searchInput , categoriesContainer} from "./selectors"
-import {getUrlFromRandom} from "./getUrl"
+import {getJokeBtn , searchInput , categoriesContainer ,favouriteShowBtn , favouriteWrapper ,random, categories, search} from "./selectors"
+import {getUrlFromRandom ,getUrlFronInput} from "./getUrl"
 
 export function disableGetJokeBtn() {
     getJokeBtn.disabled = true
@@ -15,9 +15,6 @@ export function getTimeLastUpdate(timeLastUpdate) {
     const timeDifference = time.getTime() - timeUpdate.getTime()
     const hoursAgo = parseInt(timeDifference / (1000 * 60 * 60))
     return hoursAgo
-}
-export function clearJoke(container) {
-    container.innerHTML = ''
 }
 export function ensureArray(arr) {
     return Array.isArray(arr) ? arr : [arr]
@@ -41,3 +38,13 @@ export function selectSearch() {
     searchInput.classList.remove('hide-search-field')
     disableGetJokeBtn()
 }
+export function showFavourite(){
+    favouriteWrapper.classList.toggle('show-favourite')
+    favouriteShowBtn.classList.toggle('favourite-show-btn_active')
+}
+
+searchInput.addEventListener('input', getUrlFronInput)
+categories.addEventListener('click', selectCategories)
+random.addEventListener('click', selectRandom)
+search.addEventListener('click', selectSearch)
+favouriteShowBtn.addEventListener('click', showFavourite)

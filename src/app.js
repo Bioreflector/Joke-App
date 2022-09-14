@@ -1,18 +1,11 @@
-import {getJokeBtn,jokesContainer,jokeFavouriteConteiner,random, categories, search, searchInput} from "./selectors"
-import {selectRandom , selectCategories, selectSearch ,getTimeLastUpdate ,clearJoke} from "./helpers"
+import {jokesContainer,jokeFavouriteConteiner, search,} from "./selectors"
 import {isFavourite} from "./check"
-import {getUrlFronInput} from "./getUrl"
-import {showJoke,jokes} from "./async"
+import {jokes} from "./async"
 import {rander ,randerFavourite} from "./radner"
-
-
 export let jokesFavouriteColection = JSON.parse(localStorage.getItem('jokesFavouriteColection'))
 if(jokesFavouriteColection === null){
     jokesFavouriteColection = []
 }
-
-export const srcImgLike = "images/like.png"
-export const srcImgLikeActive = "images/like-active.png"
 
 randerFavourite()
 
@@ -40,7 +33,6 @@ function addJokeToFavourite(idJoke) {
     randerFavourite()
 
 }
-
 function removeJoke(idJoke) {
     jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
         if (item.id !== idJoke) {
@@ -51,16 +43,6 @@ function removeJoke(idJoke) {
     jokeFavouriteConteiner.innerHTML = ""
     randerFavourite()
 }
-
-
-
-
-
-searchInput.addEventListener('input', getUrlFronInput)
-categories.addEventListener('click', selectCategories)
-random.addEventListener('click', selectRandom)
-search.addEventListener('click', selectSearch)
-getJokeBtn.addEventListener('click', showJoke)
 
 function saveToMemory() {
     localStorage.setItem('jokesFavouriteColection', JSON.stringify(jokesFavouriteColection))

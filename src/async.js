@@ -1,7 +1,7 @@
- import {search , jokesContainer} from "./selectors"
+ import {search , jokesContainer ,getJokeBtn} from "./selectors"
  import {url,urlCategory} from "./getUrl"
  import {randerCategory,rander} from "./radner"
- import {clearJoke,ensureArray} from "./helpers"
+ import {ensureArray} from "./helpers"
 
  export let jokes
 
@@ -20,7 +20,7 @@ getCategories()
  export async function showJoke(event) {
     event.preventDefault()
     jokes = await getFetch(url)
-    clearJoke(jokesContainer)
+    jokesContainer.innerHTML = ""
     if (search.checked) {
         const { result } = jokes
         jokes = result
@@ -31,3 +31,4 @@ getCategories()
         rander()
     }
 }
+getJokeBtn.addEventListener('click', showJoke)

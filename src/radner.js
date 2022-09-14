@@ -2,7 +2,9 @@ import {checkedCategories ,isFavourite} from "./check"
 import {categoriesContainer , jokesContainer , jokeFavouriteConteiner} from "./selectors"
 import {getTimeLastUpdate} from "./helpers"
 import {jokes} from "./async"
-import {srcImgLike,srcImgLikeActive ,likeJoke , jokesFavouriteColection} from "./app"
+import {likeJoke , jokesFavouriteColection} from "./app"
+const srcImgLike = "images/like.png"
+const srcImgLikeActive = "images/like-active.png"
 
 
 function createCategory(category){

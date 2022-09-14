@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <main class="main">
+            <div class="work-place">
+                <p class="msi">MSI 2020</p>
+                <button class="favourite-show-btn"><span class = 'favoruite-btn-animation'></span><div class="favoruite-btn-text">Favourite</div></button>
+                <h2 class="work-place-title">Hey! <span>Let’s try to find a joke for you:</span></h2>
+                <form action="" id="joke-find" name="formSearchJoke">
+                    <div class="radio-box">
+                        <div class="input-box">
+                            <input type="radio" id="random" name="getJoke" value="random" checked>
+                            <label for="random" class="label-For-Search-type">Random</label>
+                            
+                        </div>
+                        <div class="input-box">
+                            <input type="radio" id="categories" name="getJoke" value="categories">
+                            <label for="categories" class="label-For-Search-type">From categories</label>
+                        </div>
+                        <div class="categories-container hide-categories"></div>
+                        <div class="input-box">
+                            <input type="radio" id="search" name="getJoke" value="search">
+                            <label for="search" class="label-For-Search-type">Search</label>
+                        </div>
+                        <input type="text" id="searchInput" class="hide-search-field" placeholder="Free text search">
+                    </div>
+                    <button class="joke-find__btn">Get a joke</button>
+                </form>
+                <div class="jokes-container">
+
+                </div>
+            </div>
+            <div class="favourite-wrapper">
+                <h2 class="favourite-title">Favourite</h2>
+                <div class="favourite-container">
+                    
+                    
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    <script src="app.js" type="module"></script>
+    
+</body>
+</html>

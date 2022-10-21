@@ -15,9 +15,11 @@ const srcImgLikeActive = "images/like-active.png"
 
 let url = 'https://api.chucknorris.io/jokes/random'
 const urlCategory = 'https://api.chucknorris.io/jokes/categories'
+const defaultUrl = 'https://api.chucknorris.io/jokes'
 
 randerFavourite()
 getCategories()
+
 
 async function getCategories(){
     const response = await fetch(urlCategory)
@@ -92,52 +94,47 @@ function сhooseCategory() {
 }
 
 function getUrlFromCategories(category) {
-    url = `https://api.chucknorris.io/jokes/random?category=${category.value}`
+    url = `${defaultUrl}/random?category=${category.value}`
 }
 function getUrlFromRandom() {
-    url = 'https://api.chucknorris.io/jokes/random'
+    url = `${defaultUrl}/random`
 }
 function getUrlFronInput() {
     let valueFromInput = searchInput.value
-    url = `https://api.chucknorris.io/jokes/search?query=${valueFromInput}`
-    if (searchInput.value.length >= 3) {
+    url = `${defaultUrl}/search?query=${valueFromInput}`
+    const minLengthWord = 3
+    if (searchInput.value.length >= minLengthWord) {
         enableGetJokeBtn()
     }
     else {
         disableGetJokeBtn()
     }
 }
-function isFavourite(idJoke){
-    return jokesFavouriteColection.find((favorite) => favorite.id === idJoke);
+function isFavourite(joke){
+    return jokesFavouriteColection.find((favorite) => favorite.id === joke.id);
 }
-function likeJoke(id) {
-    if (isFavourite(id)){
-        removeJoke(id)
+function likeJoke(joke) {
+    if (isFavourite(joke)){
+        removeJoke(joke)
     } 
     else{
-        addJokeToFavourite(id)
+        addJokeToFavourite(joke)
     }
     jokesContainer.innerHTML = ""
     rander()
     
 }
-function addJokeToFavourite(idJoke) {
-    if (search.checked) {
-        const joke = jokes.filter(item => item.id === idJoke)
-        jokesFavouriteColection.push(...joke)
-        
-    } else {
-        jokesFavouriteColection.push(...jokes)
-    }
+function addJokeToFavourite(joke) {
+    jokesFavouriteColection.push(joke)
     saveToMemory()
     jokeFavouriteConteiner.innerHTML = ""
     randerFavourite()
 
 }
 
-function removeJoke(idJoke) {
+function removeJoke(joke) {
     jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
-        if (item.id !== idJoke) {
+        if (item.id !== joke.id) {
             return item
         }
     })
@@ -154,30 +151,29 @@ function getTimeLastUpdate(timeLastUpdate) {
     return hoursAgo
 }
 
-function createJokeCard(item) {
+function createJokeCard(joke) {
     const jokeCard = document.createElement('div')
     jokeCard.classList.add('joke-card')
     jokeCard.innerHTML =
         `<div class = "box-card-icon"><img src="images/message.png" alt="icon"></div>
         <span class = "card-joke-id">ID: 
-        <a href="https://api.chucknorris.io/jokes/${item.id}">${item.id}<img src="images/link.png" alt="link"></a>
+        <a href="https://api.chucknorris.io/jokes/${joke.id}">${joke.id}<img src="images/link.png" alt="link"></a>
         </span>
-        <p class ="joke-text">${item.value}</p>`
+        <p class ="joke-text">${joke.value}</p>`
     const likeBtn = document.createElement('img')
-    likeBtn.src = isFavourite(item.id) ? srcImgLikeActive : srcImgLike
+    likeBtn.src = isFavourite(joke) ? srcImgLikeActive : srcImgLike
     likeBtn.alt = 'like'
-    likeBtn.dataset.id = item.id
     likeBtn.classList.add('like-btn')
-    likeBtn.addEventListener('click' , ()=> likeJoke(item.id))
+    likeBtn.addEventListener('click' , ()=> likeJoke(joke))
     const boxInf = document.createElement('div')
     boxInf.classList.add('card-box-inf')
     const update = document.createElement('p')
     update.classList.add('update-inf-card')
-    update.innerHTML = `Last update: <b>${getTimeLastUpdate(item.updated_at)} hours ago</b>`
-    if (item.categories.length !== 0) {
+    update.innerHTML = `Last update: <b>${getTimeLastUpdate(joke.updated_at)} hours ago</b>`
+    if (joke.categories.length !== 0) {
         const category = document.createElement('p')
         category.classList.add('category-card')
-        category.innerText = item.categories
+        category.innerText = joke.categories
         boxInf.insertAdjacentElement("beforeend", category)
     }
     jokeCard.insertAdjacentElement("beforeend", likeBtn)

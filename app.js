@@ -44,10 +44,10 @@ async function getCategories(){
 }
 
 function randerCategory(categoriesArray) {
-    const categoriesList = categoriesArray.map((item) => {
-        return createCategory(item)
+    const categoriesList = categoriesArray.map((category) => {
+        return createCategory(category)
     })
-    categoriesList.forEach(item => categoriesContainer.insertAdjacentElement('beforeend' , item))
+    categoriesList.forEach(category => categoriesContainer.insertAdjacentElement('beforeend' , category))
 }
 
 function disableGetJokeBtn() {
@@ -111,7 +111,7 @@ function getUrlFronInput() {
     }
 }
 function isFavourite(joke){
-    return jokesFavouriteColection.find((favorite) => favorite.id === joke.id);
+    return jokesFavouriteColection.find((favoriteJoke) => favoriteJoke.id === joke.id);
 }
 function likeJoke(joke) {
     if (isFavourite(joke)){
@@ -133,9 +133,9 @@ function addJokeToFavourite(joke) {
 }
 
 function removeJoke(joke) {
-    jokesFavouriteColection = jokesFavouriteColection.filter((item) => {
-        if (item.id !== joke.id) {
-            return item
+    jokesFavouriteColection = jokesFavouriteColection.filter((favoriteJoke) => {
+        if (favoriteJoke.id !== joke.id) {
+            return favoriteJoke
         }
     })
     saveToMemory()
@@ -183,13 +183,13 @@ function createJokeCard(joke) {
 }
 
 function rander() {
-    const jokeList = jokes.map(item => createJokeCard(item)) 
-    jokeList.forEach(item => jokesContainer.insertAdjacentElement('beforeend' , item))       
+    const jokeList = jokes.map(joke => createJokeCard(joke)) 
+    jokeList.forEach(joke => jokesContainer.insertAdjacentElement('beforeend' , joke))       
 }
 
 function randerFavourite() {
-    const jokeList = jokesFavouriteColection.map(item => createJokeCard(item)) 
-    jokeList.forEach(item => jokeFavouriteConteiner.insertAdjacentElement('beforeend' , item)) 
+    const jokeList = jokesFavouriteColection.map(favoriteJoke => createJokeCard(favoriteJoke)) 
+    jokeList.forEach(favoriteJoke => jokeFavouriteConteiner.insertAdjacentElement('beforeend' , favoriteJoke)) 
 }
 
 function ensureArray(arr) {

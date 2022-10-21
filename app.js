@@ -15,7 +15,6 @@ const srcImgLikeActive = "images/like-active.png"
 
 let url = 'https://api.chucknorris.io/jokes/random'
 const urlCategory = 'https://api.chucknorris.io/jokes/categories'
-let jokes =[]
 
 randerFavourite()
 getCategories()
@@ -119,7 +118,7 @@ function likeJoke(id) {
         addJokeToFavourite(id)
     }
     jokesContainer.innerHTML = ""
-    rander(jokes)
+    rander()
     
 }
 function addJokeToFavourite(idJoke) {

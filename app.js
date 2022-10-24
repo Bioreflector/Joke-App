@@ -12,7 +12,7 @@ const getJokeBtn = document.querySelector('.joke-find__btn')
 
 const srcImgLike = "images/like.png"
 const srcImgLikeActive = "images/like-active.png"
-
+let jokes = []
 let url = 'https://api.chucknorris.io/jokes/random'
 const urlCategory = 'https://api.chucknorris.io/jokes/categories'
 const defaultUrl = 'https://api.chucknorris.io/jokes'
